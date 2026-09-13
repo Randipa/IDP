@@ -44,12 +44,8 @@ techdocs:
     type: local
 
 auth:
-  environment: production
   providers:
-    github:
-      production:
-        clientId: ${AUTH_GITHUB_CLIENT_ID}
-        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+    guest: {}
 
 catalog:
   locations:

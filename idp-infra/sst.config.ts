@@ -75,9 +75,12 @@ export default $config({
         POSTGRES_PASSWORD: database.password,
         POSTGRES_DB: database.database,
         GITHUB_TOKEN: githubToken.value,
-        SONARQUBE_BASE_URL: process.env.SONARQUBE_BASE_URL ?? '',
+        SONARQUBE_BASE_URL:
+          process.env.SONARQUBE_BASE_URL || 'http://127.0.0.1:9000',
         SONARQUBE_EXTERNAL_URL:
-          process.env.SONARQUBE_EXTERNAL_URL ?? process.env.SONARQUBE_BASE_URL ?? '',
+          process.env.SONARQUBE_EXTERNAL_URL ||
+          process.env.SONARQUBE_BASE_URL ||
+          'http://127.0.0.1:9000',
         SONARQUBE_API_KEY: sonarApiKey.value,
         BACKEND_SECRET: backendSecret.value,
         AUTH_GITHUB_CLIENT_ID: process.env.AUTH_GITHUB_CLIENT_ID ?? '',
