@@ -1,0 +1,68 @@
+name: Reusable SonarQube analysis
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: Node.js version
+        required: false
+        type: string
+        default: '20'
+      working-directory:
+        description: Path to the project root
+        required: false
+        type: string
+        default: '.'
+      test-command:
+        description: Command that generates coverage before SonarQube analysis
+        required: false
+        type: string
+        default: npm run test:cov
+      fail-on-quality-gate:
+        description: Fail the workflow when the SonarQube quality gate fails
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      SONAR_TOKEN:
+        description: SonarQube token with analysis permissions
+        required: true
+      SONAR_HOST_URL:
+        description: Base URL of the self-hosted SonarQube server
+        required: true
+
+jobs:
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+      - name: Run tests with coverage
+        run: ${{ inputs.test-command }}
+      - name: SonarQube scan
+        uses: SonarSource/sonarqube-scan-action@v4.2.1
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      - name: Enforce quality gate
+        if: ${{ inputs.fail-on-quality-gate }}
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

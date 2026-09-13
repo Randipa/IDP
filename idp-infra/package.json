@@ -1,0 +1,18 @@
+{
+  "name": "idp-infra",
+  "private": true,
+  "version": "0.1.0",
+  "description": "SST deployment for the Company Backstage IDP",
+  "scripts": {
+    "prepare": "bash ./scripts/prepare-deploy.sh",
+    "deploy": "npm run prepare && sst deploy",
+    "deploy:dev": "npm run prepare && sst deploy --stage dev",
+    "deploy:staging": "npm run prepare && sst deploy --stage staging",
+    "deploy:production": "npm run prepare && sst deploy --stage production",
+    "remove": "sst remove"
+  },
+  "devDependencies": {
+    "sst": "^3.4.0",
+    "typescript": "^5.7.2"
+  }
+}

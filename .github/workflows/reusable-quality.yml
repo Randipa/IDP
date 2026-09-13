@@ -1,0 +1,44 @@
+name: Reusable quality checks
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: Node.js version
+        required: false
+        type: string
+        default: '20'
+      working-directory:
+        description: Path to the project root
+        required: false
+        type: string
+        default: '.'
+      test-command:
+        description: Test command to run after lint
+        required: false
+        type: string
+        default: npm run test
+
+jobs:
+  quality:
+    name: Code quality
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+      - run: npm run lint
+      - run: ${{ inputs.test-command }}
+      - run: npm run build

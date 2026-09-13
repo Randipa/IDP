@@ -1,0 +1,48 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: aws-main-account
+  title: AWS Main Account
+  description: Single AWS account with SST stages for dev, staging, and production.
+  tags:
+    - aws
+    - sst
+spec:
+  type: cloud-account
+  owner: group:default/platform
+  system: company-idp
+  dependencyOf:
+    - component:default/company-idp
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: github-organization
+  title: GitHub Organization
+  description: Source control and CI/CD workflows for all services.
+  tags:
+    - github
+    - ci-cd
+spec:
+  type: vcs
+  owner: group:default/platform
+  system: company-idp
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: sonarqube
+  title: SonarQube
+  description: Self-hosted code quality and security analysis for production promotion gates.
+  tags:
+    - sonarqube
+    - code-quality
+    - security
+  annotations:
+    company.io/sonarqube-stage: sonarqube
+    company.io/setup-doc: docs/phase-3-sonarqube-setup.md
+spec:
+  type: quality-service
+  owner: group:default/platform
+  system: company-idp

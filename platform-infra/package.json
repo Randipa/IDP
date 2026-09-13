@@ -1,0 +1,18 @@
+{
+  "name": "platform-infra",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Company IDP platform infrastructure (GitHub OIDC and deploy IAM roles)",
+  "scripts": {
+    "deploy": "sst deploy",
+    "deploy:platform": "sst deploy --stage platform",
+    "deploy:sonarqube": "sst deploy --stage sonarqube",
+    "remove": "sst remove --stage platform",
+    "remove:sonarqube": "sst remove --stage sonarqube"
+  },
+  "devDependencies": {
+    "@pulumi/aws": "^6.66.0",
+    "sst": "^3.4.0",
+    "typescript": "^5.7.2"
+  }
+}

@@ -1,0 +1,129 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: nestjs-api
+  title: NestJS API Service
+  description: Production-ready NestJS API with SST multi-stage AWS deployment and GitHub Actions quality gates.
+  tags:
+    - recommended
+    - nestjs
+    - api
+    - sst
+    - aws
+  links:
+    - url: https://docs.nestjs.com/
+      title: NestJS Documentation
+    - url: https://sst.dev/docs/
+      title: SST Documentation
+spec:
+  owner: group:default/platform
+  type: service
+
+  parameters:
+    - title: Service details
+      required:
+        - name
+        - description
+        - owner
+      properties:
+        name:
+          title: Service name
+          type: string
+          description: Unique name used for the repository, SST app, and catalog entity.
+          ui:field: EntityNamePicker
+          ui:autofocus: true
+        description:
+          title: Description
+          type: string
+          description: Short description of the API service.
+        owner:
+          title: Owner
+          type: string
+          description: Team responsible for this service.
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+
+    - title: Repository
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+    - title: AWS configuration
+      required:
+        - awsRegion
+      properties:
+        awsRegion:
+          title: AWS Region
+          type: string
+          default: ap-south-1
+          enum:
+            - ap-south-1
+            - us-east-1
+            - eu-west-1
+            - ap-southeast-1
+          enumNames:
+            - Asia Pacific (Mumbai)
+            - US East (N. Virginia)
+            - Europe (Ireland)
+            - Asia Pacific (Singapore)
+
+  steps:
+    - id: fetch-base
+      name: Fetch skeleton
+      action: fetch:template
+      input:
+        url: ./content
+        values:
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+          awsRegion: ${{ parameters.awsRegion }}
+          githubOrg: ${{ parameters.repoUrl | parseRepoUrl | pick('owner') }}
+          githubRepo: ${{ parameters.repoUrl | parseRepoUrl | pick('repo') }}
+          idpRepo: ${{ parameters.repoUrl | parseRepoUrl | pick('owner') }}/company-idp
+          idpRef: main
+
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        description: ${{ parameters.description }}
+        defaultBranch: main
+        gitCommitMessage: 'chore: bootstrap NestJS API from Company IDP'
+        repoVisibility: private
+
+    - id: register
+      name: Register in catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+    - id: notify
+      name: Notify owner
+      action: notification:send
+      input:
+        recipients: entity
+        entityRefs:
+          - user:default/platform-lead
+        title: NestJS API created
+        info: '${{ parameters.name }} was scaffolded and published to GitHub.'
+        severity: normal
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps['publish'].output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps['register'].output.entityRef }}

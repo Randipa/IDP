@@ -1,13 +1,22 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: backstage
-  description: An example of a Backstage application.
-  # Example for optional annotations
-  # annotations:
-  #   github.com/project-slug: backstage/backstage
-  #   backstage.io/techdocs-ref: dir:.
+  name: company-idp
+  title: Company Internal Developer Platform
+  description: Internal developer portal for standardized project scaffolding, AWS/SST deployments, and automated security and quality gates.
+  tags:
+    - backstage
+    - idp
+    - platform
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: company/company-idp
 spec:
   type: website
-  owner: john@example.com
-  lifecycle: experimental
+  lifecycle: production
+  owner: group:default/platform
+  system: company-idp
+  dependsOn:
+    - resource:default/aws-main-account
+    - resource:default/github-organization
+    - resource:default/sonarqube

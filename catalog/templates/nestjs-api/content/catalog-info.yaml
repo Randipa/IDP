@@ -1,0 +1,25 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{ values.name }}
+  title: ${{ values.name }}
+  description: ${{ values.description }}
+  tags:
+    - nestjs
+    - api
+    - sst
+    - aws
+  annotations:
+    github.com/project-slug: ${{ values.githubOrg }}/${{ values.githubRepo }}
+    backstage.io/techdocs-ref: dir:.
+    sonarqube.org/project-key: ${{ values.name }}
+    company.io/aws-region: ${{ values.awsRegion }}
+    company.io/sst-stages: dev,staging,production
+spec:
+  type: service
+  lifecycle: experimental
+  owner: ${{ values.owner }}
+  system: client-delivery
+  dependsOn:
+    - resource:default/aws-main-account
+    - resource:default/github-organization

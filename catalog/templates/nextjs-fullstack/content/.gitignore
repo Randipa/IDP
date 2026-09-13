@@ -1,0 +1,9 @@
+.next
+node_modules
+.sst
+coverage
+dist
+.env
+.env.*
+!.env.example
+*.log

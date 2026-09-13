@@ -1,0 +1,34 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: nestjs-api-reference
+  title: NestJS API (Reference)
+  description: Reference architecture for NestJS APIs deployed with SST and GitHub Actions quality gates.
+  tags:
+    - nestjs
+    - api
+    - sst
+    - reference
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:default/backend
+  system: client-delivery
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: nextjs-fullstack-reference
+  title: Next.js Fullstack (Reference)
+  description: Reference architecture for Next.js applications with SST multi-stage deployment.
+  tags:
+    - nextjs
+    - react
+    - sst
+    - reference
+spec:
+  type: website
+  lifecycle: experimental
+  owner: group:default/frontend
+  system: client-delivery

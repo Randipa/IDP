@@ -1,0 +1,43 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: engineering
+  title: Engineering
+  description: All software engineering teams.
+spec:
+  type: department
+  children: [platform, backend, frontend]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform
+  title: Platform Engineering
+  description: Owns the internal developer platform, deployment automation, and shared tooling.
+spec:
+  type: team
+  parent: engineering
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: backend
+  title: Backend Engineering
+  description: Builds and maintains API services using NestJS and Express.
+spec:
+  type: team
+  parent: engineering
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: frontend
+  title: Frontend Engineering
+  description: Builds and maintains web applications using React and Next.js.
+spec:
+  type: team
+  parent: engineering
+  children: []

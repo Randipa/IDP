@@ -1,0 +1,71 @@
+name: Deploy Backstage IDP
+
+on:
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: SST stage for the IDP deployment
+        required: true
+        default: staging
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/**'
+      - 'catalog/**'
+      - 'idp-infra/**'
+      - 'app-config*.yaml'
+      - 'packages/backend/Dockerfile'
+
+concurrency:
+  group: deploy-idp-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy IDP (${{ github.event_name == 'workflow_dispatch' && github.event.inputs.stage || 'staging' }})
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Build Backstage backend bundle
+        run: |
+          yarn install --immutable
+          yarn tsc
+          yarn build:backend
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'ap-south-1' }}
+
+      - name: Install SST
+        working-directory: idp-infra
+        run: npm ci
+
+      - name: Deploy with SST
+        working-directory: idp-infra
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION || 'ap-south-1' }}
+          IDP_PUBLIC_URL: ${{ vars.IDP_PUBLIC_URL }}
+          SONARQUBE_BASE_URL: ${{ vars.SONARQUBE_BASE_URL }}
+          SONARQUBE_EXTERNAL_URL: ${{ vars.SONARQUBE_EXTERNAL_URL }}
+          AUTH_GITHUB_CLIENT_ID: ${{ secrets.AUTH_GITHUB_CLIENT_ID }}
+          AUTH_GITHUB_CLIENT_SECRET: ${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}
+        run: npx sst deploy --stage ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.stage || 'staging' }}

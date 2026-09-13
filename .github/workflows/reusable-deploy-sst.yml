@@ -1,0 +1,58 @@
+name: Reusable SST deploy
+
+on:
+  workflow_call:
+    inputs:
+      stage:
+        description: SST stage name
+        required: true
+        type: string
+      aws-region:
+        description: AWS region for deployment
+        required: true
+        type: string
+      working-directory:
+        description: Path to the project root
+        required: false
+        type: string
+        default: '.'
+      node-version:
+        description: Node.js version
+        required: false
+        type: string
+        default: '20'
+    secrets:
+      AWS_ROLE_ARN:
+        description: IAM role ARN configured for GitHub OIDC
+        required: true
+
+jobs:
+  deploy:
+    name: Deploy (${{ inputs.stage }})
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ inputs.aws-region }}
+      - name: Deploy with SST
+        run: npx sst deploy --stage ${{ inputs.stage }}

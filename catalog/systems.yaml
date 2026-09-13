@@ -1,0 +1,38 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: platform-engineering
+  title: Platform Engineering
+  description: Internal platforms, tooling, and delivery automation for all engineering teams.
+spec:
+  owner: group:default/platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: company-idp
+  title: Company Internal Developer Platform
+  description: Backstage portal for scaffolding, deployment, and quality gates across dev, staging, and production.
+  tags:
+    - backstage
+    - idp
+    - sst
+    - aws
+spec:
+  owner: group:default/platform
+  domain: platform-engineering
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: client-delivery
+  title: Client Project Delivery
+  description: Client-facing applications and APIs deployed through the standardized SST pipeline.
+  tags:
+    - client-projects
+    - sst
+    - aws
+spec:
+  owner: group:default/engineering
+  domain: platform-engineering
