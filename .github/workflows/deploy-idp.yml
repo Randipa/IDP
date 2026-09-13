@@ -50,7 +50,9 @@ jobs:
           yarn build:backend
 
       - name: Debug GitHub repository context
-        run: echo "GitHub repository=${{ github.repository }}"
+        run: |
+          echo "GitHub repository=${{ github.repository }}"
+          echo "GitHub repository_id=${{ github.repository_id }}"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4

@@ -46,7 +46,9 @@ export async function createPlatformStack(): Promise<PlatformOutputs> {
               "StringLike": {
                 "token.actions.githubusercontent.com:sub": [
                   "repo:${githubOrg}/${githubRepo}:*",
-                  "repo:${githubOrg}/*"
+                  "repo:${githubOrg}/*",
+                  "repo:${githubOrg}@*/${githubRepo}@*:*",
+                  "repo:${githubOrg}@*/*"
                 ]
               }
             }
