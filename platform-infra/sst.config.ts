@@ -1,8 +1,5 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
-import { createPlatformStack } from './lib/platform-stack';
-import { createSonarQubeStack } from './lib/sonarqube-stack';
-
 export default $config({
   app(input) {
     const isSonarQube = input?.stage === 'sonarqube';
@@ -21,9 +18,11 @@ export default $config({
   },
   async run() {
     if ($app.stage === 'sonarqube') {
+      const { createSonarQubeStack } = await import('./lib/sonarqube-stack');
       return createSonarQubeStack();
     }
 
+    const { createPlatformStack } = await import('./lib/platform-stack');
     return createPlatformStack();
   },
 });

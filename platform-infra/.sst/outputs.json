@@ -1,0 +1,1 @@
+{"deployRoleArns":{"dev":"arn:aws:iam::958126466476:role/company-idp-github-deploy-dev","production":"arn:aws:iam::958126466476:role/company-idp-github-deploy-production","staging":"arn:aws:iam::958126466476:role/company-idp-github-deploy-staging"},"githubOidcProviderArn":"arn:aws:iam::958126466476:oidc-provider/token.actions.githubusercontent.com","githubOrg":"Randipa"}

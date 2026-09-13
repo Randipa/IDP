@@ -1,7 +1,5 @@
 import type { PlatformOutputs } from './types';
 
-const GITHUB_OIDC_URL = 'https://token.actions.githubusercontent.com';
-const GITHUB_OIDC_THUMBPRINT = '6938fd4d98bab03faadb97b34396831e3780aea1';
 const DEPLOY_STAGES = ['dev', 'staging', 'production'] as const;
 
 export async function createPlatformStack(): Promise<PlatformOutputs> {
@@ -19,12 +17,6 @@ export async function createPlatformStack(): Promise<PlatformOutputs> {
       `arn:aws:iam::${id}:oidc-provider/token.actions.githubusercontent.com`,
   );
 
-  const oidcProvider = new aws.iam.OpenIdConnectProvider('GitHubActionsOidc', {
-    url: GITHUB_OIDC_URL,
-    clientIdLists: ['sts.amazonaws.com'],
-    thumbprintLists: [GITHUB_OIDC_THUMBPRINT],
-  });
-
   const deployRoles: Record<string, $util.Output<string>> = {};
 
   for (const stage of DEPLOY_STAGES) {
@@ -37,7 +29,7 @@ export async function createPlatformStack(): Promise<PlatformOutputs> {
           {
             "Effect": "Allow",
             "Principal": {
-              "Federated": "${oidcProvider.arn}"
+              "Federated": "${oidcProviderArn}"
             },
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
@@ -63,8 +55,7 @@ export async function createPlatformStack(): Promise<PlatformOutputs> {
 
   return {
     githubOrg,
-    githubOidcProviderArn: oidcProvider.arn,
-    githubOidcProviderAliasArn: oidcProviderArn,
+    githubOidcProviderArn: oidcProviderArn,
     deployRoleArns: deployRoles,
   };
 }
