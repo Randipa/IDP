@@ -5,7 +5,7 @@ export async function createSonarQubeStack(): Promise<SonarQubeOutputs> {
 
   const database = new sst.aws.Postgres('SonarQubeDb', {
     vpc,
-    version: '16.4',
+    version: '16.9',
     instance: 't4g.micro',
     storage: '20 GB',
     transform: {

@@ -29,7 +29,7 @@ export default $config({
 
     const database = new sst.aws.Postgres('IdpDb', {
       vpc,
-      version: '16.4',
+      version: '16.9',
       instance: isProduction ? 't4g.small' : 't4g.micro',
       storage: '20 GB',
       transform: {
