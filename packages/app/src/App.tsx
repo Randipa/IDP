@@ -5,9 +5,11 @@ import sonarqubePlugin from '@backstage-community/plugin-sonarqube/alpha';
 import { navModule } from './modules/nav';
 import { homeModule } from './modules/home';
 import { awsPlatformModule } from './modules/platform';
+import { authModule } from './modules/auth';
 
 export default createApp({
   features: [
+    authModule,
     catalogPlugin,
     githubActionsPlugin,
     sonarqubePlugin,

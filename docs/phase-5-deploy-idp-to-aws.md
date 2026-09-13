@@ -112,7 +112,7 @@ npm run deploy:staging
 ## Hardening checklist
 
 - [ ] HTTPS via ACM certificate on the load balancer
-- [ ] Replace guest auth (local only) with GitHub OAuth in production
+- [x] GitHub OAuth sign-in in production (see [AUTH-SETUP.md](AUTH-SETUP.md))
 - [ ] Restrict GitHub deploy IAM roles per repository
 - [ ] Enable RDS backups and monitoring
 - [ ] Store SST secrets only in AWS, rotate regularly

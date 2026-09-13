@@ -3,6 +3,8 @@ apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
   name: platform-lead
+  annotations:
+    github.com/user-login: platform-lead
 spec:
   profile:
     displayName: Platform Lead
@@ -13,6 +15,8 @@ apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
   name: backend-lead
+  annotations:
+    github.com/user-login: backend-lead
 spec:
   profile:
     displayName: Backend Lead
@@ -23,6 +27,8 @@ apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
   name: frontend-lead
+  annotations:
+    github.com/user-login: frontend-lead
 spec:
   profile:
     displayName: Frontend Lead

@@ -90,6 +90,10 @@ jobs:
             echo "GitHub secret BACKEND_SECRET is required."
             exit 1
           fi
+          if [ -z "${{ secrets.AUTH_GITHUB_CLIENT_ID }}" ] || [ -z "${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}" ]; then
+            echo "GitHub secrets AUTH_GITHUB_CLIENT_ID and AUTH_GITHUB_CLIENT_SECRET are required for production sign-in."
+            exit 1
+          fi
           SONAR_KEY="${SONARQUBE_API_KEY:-not-configured}"
           npx sst secret set GithubToken "$IDP_GITHUB_PAT" --stage "$SST_STAGE"
           npx sst secret set SonarApiKey "$SONAR_KEY" --stage "$SST_STAGE"
@@ -107,6 +111,10 @@ jobs:
         run: |
           if [ -z "$IDP_PUBLIC_URL" ] || echo "$IDP_PUBLIC_URL" | grep -Eq 'localhost|127\.0\.0\.1'; then
             echo "Set GitHub variable IDP_PUBLIC_URL to the load balancer URL before deploying."
+            exit 1
+          fi
+          if [ -z "$AUTH_GITHUB_CLIENT_ID" ] || [ -z "$AUTH_GITHUB_CLIENT_SECRET" ]; then
+            echo "Set AUTH_GITHUB_CLIENT_ID and AUTH_GITHUB_CLIENT_SECRET repository secrets before deploying."
             exit 1
           fi
           IDP_PUBLIC_URL="${IDP_PUBLIC_URL%/}"
