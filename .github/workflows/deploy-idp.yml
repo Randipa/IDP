@@ -44,7 +44,16 @@ jobs:
         run: corepack enable
 
       - name: Build Backstage backend bundle
+        env:
+          IDP_PUBLIC_URL: ${{ vars.IDP_PUBLIC_URL }}
+          APP_CONFIG_app_baseUrl: ${{ vars.IDP_PUBLIC_URL }}
+          APP_CONFIG_backend_baseUrl: ${{ vars.IDP_PUBLIC_URL }}
+          APP_CONFIG_backend_cors_origin: ${{ vars.IDP_PUBLIC_URL }}
         run: |
+          if [ -z "$IDP_PUBLIC_URL" ] || echo "$IDP_PUBLIC_URL" | grep -Eq 'localhost|127\.0\.0\.1'; then
+            echo "Set GitHub variable IDP_PUBLIC_URL to the load balancer URL before deploying."
+            exit 1
+          fi
           yarn install --immutable
           yarn tsc
           yarn build:backend
@@ -95,4 +104,11 @@ jobs:
           SONARQUBE_EXTERNAL_URL: ${{ vars.SONARQUBE_EXTERNAL_URL }}
           AUTH_GITHUB_CLIENT_ID: ${{ secrets.AUTH_GITHUB_CLIENT_ID }}
           AUTH_GITHUB_CLIENT_SECRET: ${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}
-        run: npx sst deploy --stage ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.stage || 'staging' }}
+        run: |
+          if [ -z "$IDP_PUBLIC_URL" ] || echo "$IDP_PUBLIC_URL" | grep -Eq 'localhost|127\.0\.0\.1'; then
+            echo "Set GitHub variable IDP_PUBLIC_URL to the load balancer URL before deploying."
+            exit 1
+          fi
+          IDP_PUBLIC_URL="${IDP_PUBLIC_URL%/}"
+          export IDP_PUBLIC_URL
+          npx sst deploy --stage ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.stage || 'staging' }}
