@@ -2,13 +2,13 @@
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: platform-lead
+  name: randipa
   annotations:
-    github.com/user-login: platform-lead
+    github.com/user-login: Randipa
 spec:
   profile:
-    displayName: Platform Lead
-    email: platform-lead@company.com
+    displayName: S.P.Randeepa
+    email: saliyapathum711@gmail.com
   memberOf: [platform]
 ---
 apiVersion: backstage.io/v1alpha1
