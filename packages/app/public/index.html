@@ -5,19 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script>
       (function () {
-        if (typeof globalThis.crypto?.randomUUID === 'function') return;
-        var cryptoObj = globalThis.crypto || (globalThis.crypto = {});
-        cryptoObj.randomUUID = function randomUUID() {
-          return '10000000-1000-4000-8000-100000000000'.replace(
-            /[018]/g,
-            function (c) {
-              return (
-                Number(c) ^
-                ((Math.random() * 16) >> (Number(c) / 4))
-              ).toString(16);
-            },
+        function randomUUID() {
+          var bytes = new Uint8Array(16);
+          if (globalThis.crypto && globalThis.crypto.getRandomValues) {
+            globalThis.crypto.getRandomValues(bytes);
+          } else {
+            for (var i = 0; i < 16; i++) {
+              bytes[i] = (Math.random() * 256) | 0;
+            }
+          }
+          bytes[6] = (bytes[6] & 15) | 64;
+          bytes[8] = (bytes[8] & 63) | 128;
+          var hex = Array.prototype.map.call(bytes, function (b) {
+            return ('0' + b.toString(16)).slice(-2);
+          }).join('');
+          return (
+            hex.slice(0, 8) +
+            '-' +
+            hex.slice(8, 12) +
+            '-' +
+            hex.slice(12, 16) +
+            '-' +
+            hex.slice(16, 20) +
+            '-' +
+            hex.slice(20)
           );
-        };
+        }
+
+        if (
+          globalThis.crypto &&
+          typeof globalThis.crypto.randomUUID === 'function'
+        ) {
+          return;
+        }
+
+        var base =
+          globalThis.crypto ||
+          ({
+            getRandomValues: function (arr) {
+              for (var i = 0; i < arr.length; i++) {
+                arr[i] = (Math.random() * 256) | 0;
+              }
+              return arr;
+            },
+          });
+
+        try {
+          Object.defineProperty(base, 'randomUUID', {
+            value: randomUUID,
+            configurable: true,
+            writable: true,
+          });
+          globalThis.crypto = base;
+        } catch (e) {
+          globalThis.crypto = new Proxy(base, {
+            get: function (target, prop) {
+              if (prop === 'randomUUID') {
+                return randomUUID;
+              }
+              var value = target[prop];
+              return typeof value === 'function' ? value.bind(target) : value;
+            },
+          });
+        }
       })();
     </script>
     <meta name="theme-color" content="#000000" />
