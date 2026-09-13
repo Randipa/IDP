@@ -69,6 +69,7 @@ export default $config({
         APP_CONFIG_app_baseUrl: publicUrl,
         APP_CONFIG_backend_baseUrl: publicUrl,
         APP_CONFIG_backend_cors_origin: publicUrl,
+        APP_CONFIG_auth_providers_guest_dangerouslyAllowOutsideDevelopment: 'true',
         POSTGRES_HOST: database.host,
         POSTGRES_PORT: $interpolate`${database.port}`,
         POSTGRES_USER: database.username,

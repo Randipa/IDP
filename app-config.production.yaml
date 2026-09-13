@@ -45,7 +45,8 @@ techdocs:
 
 auth:
   providers:
-    guest: {}
+    guest:
+      dangerouslyAllowOutsideDevelopment: true
 
 catalog:
   locations:
