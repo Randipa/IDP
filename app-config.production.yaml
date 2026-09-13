@@ -5,6 +5,7 @@ app:
 backend:
   baseUrl: ${IDP_PUBLIC_URL}
   listen: ':7007'
+  trustProxy: true
   auth:
     keys:
       - secret: ${BACKEND_SECRET}
@@ -12,6 +13,10 @@ backend:
     origin: ${IDP_PUBLIC_URL}
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+    img-src: ["'self'", 'http:', 'https:', 'data:']
+    upgrade-insecure-requests: false
   database:
     client: pg
     connection:
