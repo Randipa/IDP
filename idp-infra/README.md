@@ -16,7 +16,7 @@ Add these in the IDP repository (**Settings → Secrets and variables → Action
 | Secret | Required | Example |
 |--------|----------|---------|
 | `AWS_ROLE_ARN` | Yes | `arn:aws:iam::958126466476:role/company-idp-github-deploy-staging` |
-| `GITHUB_TOKEN` | Yes | GitHub PAT with `repo` scope |
+| `IDP_GITHUB_PAT` | Yes | GitHub PAT with `repo` scope (do **not** name it `GITHUB_TOKEN`) |
 | `BACKEND_SECRET` | Yes | `openssl rand -hex 32` |
 | `SONARQUBE_API_KEY` | No | SonarQube token (defaults to `not-configured`) |
 
