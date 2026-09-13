@@ -69,6 +69,9 @@ export default $config({
         APP_CONFIG_app_baseUrl: publicUrl,
         APP_CONFIG_backend_baseUrl: publicUrl,
         APP_CONFIG_backend_cors_origin: publicUrl,
+        APP_CONFIG_auth_environment: 'production',
+        APP_CONFIG_auth_providers_github_production_clientId:
+          process.env.AUTH_GITHUB_CLIENT_ID ?? '',
         POSTGRES_HOST: database.host,
         POSTGRES_PORT: $interpolate`${database.port}`,
         POSTGRES_USER: database.username,

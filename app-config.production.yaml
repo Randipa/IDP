@@ -16,6 +16,7 @@ backend:
   csp:
     connect-src: ["'self'", 'http:', 'https:']
     img-src: ["'self'", 'http:', 'https:', 'data:']
+    frame-src: ["'self'", 'https://github.com']
     upgrade-insecure-requests: false
   database:
     client: pg

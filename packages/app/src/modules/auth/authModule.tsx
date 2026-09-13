@@ -1,9 +1,5 @@
 import type { SignInPageProps } from '@backstage/core-plugin-api';
-import {
-  configApiRef,
-  githubAuthApiRef,
-  useApi,
-} from '@backstage/core-plugin-api';
+import { githubAuthApiRef } from '@backstage/core-plugin-api';
 import { createFrontendModule } from '@backstage/frontend-plugin-api';
 import { SignInPageBlueprint } from '@backstage/plugin-app-react';
 import { SignInPage } from '@backstage/core-components';
@@ -15,30 +11,15 @@ const githubProvider = {
   apiRef: githubAuthApiRef,
 };
 
-function CompanySignInPage(props: SignInPageProps) {
-  const configApi = useApi(configApiRef);
-  const environment =
-    configApi.getOptionalString('auth.environment') ?? 'development';
-  const providers =
-    environment === 'production'
-      ? [githubProvider]
-      : ['guest' as const, githubProvider];
-
-  return (
-    <SignInPage
-      {...props}
-      title="Company IDP"
-      align="center"
-      providers={providers}
-    />
-  );
-}
-
 const companySignInPage = SignInPageBlueprint.make({
-  name: 'company-sign-in',
   params: {
     loader: async () => (props: SignInPageProps) => (
-      <CompanySignInPage {...props} />
+      <SignInPage
+        {...props}
+        title="Company IDP"
+        align="center"
+        providers={[githubProvider]}
+      />
     ),
   },
 });
