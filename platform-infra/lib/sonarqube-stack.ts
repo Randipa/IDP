@@ -8,6 +8,12 @@ export async function createSonarQubeStack(): Promise<SonarQubeOutputs> {
     version: '16.4',
     instance: 't4g.micro',
     storage: '20 GB',
+    transform: {
+      instance: {
+        backupRetentionPeriod: 0,
+        performanceInsightsEnabled: false,
+      },
+    },
   });
 
   const cluster = new sst.aws.Cluster('SonarQubeCluster', { vpc });

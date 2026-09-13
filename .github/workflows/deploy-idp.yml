@@ -65,6 +65,27 @@ jobs:
         working-directory: idp-infra
         run: npm ci --ignore-scripts
 
+      - name: Configure SST secrets
+        working-directory: idp-infra
+        env:
+          SST_STAGE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.stage || 'staging' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONARQUBE_API_KEY: ${{ secrets.SONARQUBE_API_KEY }}
+          BACKEND_SECRET: ${{ secrets.BACKEND_SECRET }}
+        run: |
+          if [ -z "$GITHUB_TOKEN" ]; then
+            echo "GitHub secret GITHUB_TOKEN is required."
+            exit 1
+          fi
+          if [ -z "$BACKEND_SECRET" ]; then
+            echo "GitHub secret BACKEND_SECRET is required."
+            exit 1
+          fi
+          SONAR_KEY="${SONARQUBE_API_KEY:-not-configured}"
+          npx sst secret set GithubToken "$GITHUB_TOKEN" --stage "$SST_STAGE"
+          npx sst secret set SonarApiKey "$SONAR_KEY" --stage "$SST_STAGE"
+          npx sst secret set BackendSecret "$BACKEND_SECRET" --stage "$SST_STAGE"
+
       - name: Deploy with SST
         working-directory: idp-infra
         env:

@@ -23,13 +23,21 @@ export default $config({
       );
     }
 
+    const isProduction = $app.stage === 'production';
+
     const vpc = new sst.aws.Vpc('IdpVpc', { nat: 'managed' });
 
     const database = new sst.aws.Postgres('IdpDb', {
       vpc,
       version: '16.4',
-      instance: $app.stage === 'production' ? 't4g.small' : 't4g.micro',
+      instance: isProduction ? 't4g.small' : 't4g.micro',
       storage: '20 GB',
+      transform: {
+        instance: {
+          backupRetentionPeriod: isProduction ? 7 : 0,
+          performanceInsightsEnabled: isProduction,
+        },
+      },
     });
 
     const cluster = new sst.aws.Cluster('IdpCluster', { vpc });

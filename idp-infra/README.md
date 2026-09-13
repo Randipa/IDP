@@ -9,7 +9,25 @@ Deploys the Backstage portal to ECS Fargate with RDS PostgreSQL.
 - Node.js 22+ and Yarn 4 at repo root
 - Public URL decided before first deploy (`IDP_PUBLIC_URL`)
 
-## One-time SST secrets
+## GitHub secrets for CI deploy
+
+Add these in the IDP repository (**Settings → Secrets and variables → Actions**):
+
+| Secret | Required | Example |
+|--------|----------|---------|
+| `AWS_ROLE_ARN` | Yes | `arn:aws:iam::958126466476:role/company-idp-github-deploy-staging` |
+| `GITHUB_TOKEN` | Yes | GitHub PAT with `repo` scope |
+| `BACKEND_SECRET` | Yes | `openssl rand -hex 32` |
+| `SONARQUBE_API_KEY` | No | SonarQube token (defaults to `not-configured`) |
+
+## GitHub variables for CI deploy
+
+| Variable | Required | Example |
+|----------|----------|---------|
+| `IDP_PUBLIC_URL` | Yes | `http://localhost:3000` (temporary until DNS is ready) |
+| `AWS_REGION` | No | `ap-south-1` |
+
+## One-time SST secrets (local deploy)
 
 From `idp-infra/` after `npm install`:
 
