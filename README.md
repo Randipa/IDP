@@ -105,4 +105,4 @@ See [`docs/phase-5-deploy-idp-to-aws.md`](docs/phase-5-deploy-idp-to-aws.md).
 
 ## Catalog Structure
 
-See [`catalog/README.md`](catalog/README.md) for entity layout and conventions.
+See [`catalog/README.md`](catalog/README.md) for entity layout and conventions
