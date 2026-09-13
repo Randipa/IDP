@@ -63,7 +63,7 @@ jobs:
 
       - name: Install SST
         working-directory: idp-infra
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Deploy with SST
         working-directory: idp-infra

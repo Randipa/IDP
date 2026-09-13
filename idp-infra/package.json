@@ -4,11 +4,11 @@
   "version": "0.1.0",
   "description": "SST deployment for the Company Backstage IDP",
   "scripts": {
-    "prepare": "bash ./scripts/prepare-deploy.sh",
-    "deploy": "npm run prepare && sst deploy",
-    "deploy:dev": "npm run prepare && sst deploy --stage dev",
-    "deploy:staging": "npm run prepare && sst deploy --stage staging",
-    "deploy:production": "npm run prepare && sst deploy --stage production",
+    "prepare-deploy": "bash ./scripts/prepare-deploy.sh",
+    "deploy": "npm run prepare-deploy && sst deploy",
+    "deploy:dev": "npm run prepare-deploy && sst deploy --stage dev",
+    "deploy:staging": "npm run prepare-deploy && sst deploy --stage staging",
+    "deploy:production": "npm run prepare-deploy && sst deploy --stage production",
     "remove": "sst remove"
   },
   "devDependencies": {
