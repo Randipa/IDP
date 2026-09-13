@@ -54,5 +54,6 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ inputs.aws-region }}
+          audience: sts.amazonaws.com
       - name: Deploy with SST
         run: npx sst deploy --stage ${{ inputs.stage }}

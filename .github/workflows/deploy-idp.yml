@@ -49,11 +49,15 @@ jobs:
           yarn tsc
           yarn build:backend
 
+      - name: Debug GitHub repository context
+        run: echo "GitHub repository=${{ github.repository }}"
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION || 'ap-south-1' }}
+          audience: sts.amazonaws.com
 
       - name: Install SST
         working-directory: idp-infra

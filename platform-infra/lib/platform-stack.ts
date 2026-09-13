@@ -4,10 +4,17 @@ const DEPLOY_STAGES = ['dev', 'staging', 'production'] as const;
 
 export async function createPlatformStack(): Promise<PlatformOutputs> {
   const githubOrg = process.env.GITHUB_ORG;
+  const githubRepo = process.env.GITHUB_REPO;
 
   if (!githubOrg) {
     throw new Error(
-      'GITHUB_ORG is required. Example: GITHUB_ORG=your-org npm run deploy:platform',
+      'GITHUB_ORG is required. Example: GITHUB_ORG=Randipa npm run deploy:platform',
+    );
+  }
+
+  if (!githubRepo) {
+    throw new Error(
+      'GITHUB_REPO is required. Example: GITHUB_REPO=IDP npm run deploy:platform',
     );
   }
 
@@ -37,7 +44,10 @@ export async function createPlatformStack(): Promise<PlatformOutputs> {
                 "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
               },
               "StringLike": {
-                "token.actions.githubusercontent.com:sub": "repo:${githubOrg}/*:*"
+                "token.actions.githubusercontent.com:sub": [
+                  "repo:${githubOrg}/${githubRepo}:*",
+                  "repo:${githubOrg}/*"
+                ]
               }
             }
           }
@@ -55,6 +65,7 @@ export async function createPlatformStack(): Promise<PlatformOutputs> {
 
   return {
     githubOrg,
+    githubRepo,
     githubOidcProviderArn: oidcProviderArn,
     deployRoleArns: deployRoles,
   };
