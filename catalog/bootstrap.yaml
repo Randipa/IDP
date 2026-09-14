@@ -1,0 +1,241 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: engineering
+  title: Engineering
+  description: All software engineering teams.
+spec:
+  type: department
+  children: [platform, backend, frontend]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform
+  title: Platform Engineering
+  description: Owns the internal developer platform, deployment automation, and shared tooling.
+spec:
+  type: team
+  parent: engineering
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: backend
+  title: Backend Engineering
+  description: Builds and maintains API services using NestJS and Express.
+spec:
+  type: team
+  parent: engineering
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: frontend
+  title: Frontend Engineering
+  description: Builds and maintains web applications using React and Next.js.
+spec:
+  type: team
+  parent: engineering
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: platform-engineering
+  title: Platform Engineering
+  description: Internal platforms, tooling, and delivery automation for all engineering teams.
+spec:
+  owner: group:default/platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: company-idp
+  title: Company Internal Developer Platform
+  description: Backstage portal for scaffolding, deployment, and quality gates across dev, staging, and production.
+  tags:
+    - backstage
+    - idp
+    - sst
+    - aws
+spec:
+  owner: group:default/platform
+  domain: platform-engineering
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: client-delivery
+  title: Client Project Delivery
+  description: Client-facing applications and APIs deployed through the standardized SST pipeline.
+  tags:
+    - client-projects
+    - sst
+    - aws
+spec:
+  owner: group:default/engineering
+  domain: platform-engineering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: aws-main-account
+  title: AWS Main Account
+  description: Single AWS account with SST stages for dev, staging, and production.
+  tags:
+    - aws
+    - sst
+spec:
+  type: cloud-account
+  owner: group:default/platform
+  system: company-idp
+  dependencyOf:
+    - component:default/company-idp
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: github-organization
+  title: GitHub Organization
+  description: Source control and CI/CD workflows for all services.
+  tags:
+    - github
+    - ci-cd
+spec:
+  type: vcs
+  owner: group:default/platform
+  system: company-idp
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: sonarqube
+  title: SonarQube
+  description: Self-hosted code quality and security analysis for production promotion gates.
+  tags:
+    - sonarqube
+    - code-quality
+    - security
+  annotations:
+    company.io/sonarqube-stage: sonarqube
+    company.io/setup-doc: docs/phase-3-sonarqube-setup.md
+spec:
+  type: quality-service
+  owner: group:default/platform
+  system: company-idp
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: Randipa
+  annotations:
+    github.com/user-login: Randipa
+spec:
+  profile:
+    displayName: S.P.Randeepa
+    email: saliyapathum711@gmail.com
+  memberOf: [platform]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: backend-lead
+  annotations:
+    github.com/user-login: backend-lead
+spec:
+  profile:
+    displayName: Backend Lead
+    email: backend-lead@company.com
+  memberOf: [backend]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: frontend-lead
+  annotations:
+    github.com/user-login: frontend-lead
+spec:
+  profile:
+    displayName: Frontend Lead
+    email: frontend-lead@company.com
+  memberOf: [frontend]
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: company-idp
+  title: Company Internal Developer Platform
+  description: Internal developer portal for standardized project scaffolding, AWS/SST deployments, and automated security and quality gates.
+  tags:
+    - backstage
+    - idp
+    - platform
+  annotations:
+    github.com/project-slug: Randipa/IDP
+spec:
+  type: website
+  lifecycle: production
+  owner: group:default/platform
+  system: company-idp
+  dependsOn:
+    - resource:default/aws-main-account
+    - resource:default/github-organization
+    - resource:default/sonarqube
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: nestjs-api-reference
+  title: NestJS API (Reference)
+  description: Reference architecture for NestJS APIs deployed with SST and GitHub Actions quality gates.
+  tags:
+    - nestjs
+    - api
+    - sst
+    - reference
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:default/backend
+  system: client-delivery
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: nextjs-fullstack-reference
+  title: Next.js Fullstack (Reference)
+  description: Reference architecture for Next.js applications with SST multi-stage deployment.
+  tags:
+    - nextjs
+    - react
+    - sst
+    - reference
+spec:
+  type: website
+  lifecycle: experimental
+  owner: group:default/frontend
+  system: client-delivery
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backlog-web
+  title: Backlog Web Application
+  description: Next.js backlog web app integrated with company IDP
+  tags:
+    - nextjs
+    - aws
+    - sst
+  annotations:
+    github.com/project-slug: Randipa/IDPCatlog
+    sonarqube.org/project-key: backlog
+    company.io/aws-region: ap-south-1
+    company.io/sst-stages: dev,staging,production
+spec:
+  type: website
+  lifecycle: experimental
+  owner: group:default/frontend
+  system: client-delivery

@@ -2,6 +2,9 @@ app:
   title: Company IDP
   baseUrl: ${IDP_PUBLIC_URL}
 
+organization:
+  name: Company
+
 backend:
   baseUrl: ${IDP_PUBLIC_URL}
   listen: ':7007'
@@ -80,34 +83,8 @@ catalog:
           Template,
         ]
   locations:
-    # Order matters: groups/systems before components that reference them
     - type: file
-      target: /app/catalog/org/groups.yaml
-      rules:
-        - allow: [Group]
-
-    - type: file
-      target: /app/catalog/systems.yaml
-      rules:
-        - allow: [System, Domain]
-
-    - type: file
-      target: /app/catalog/resources.yaml
-      rules:
-        - allow: [Resource]
-
-    - type: file
-      target: /app/catalog/org/users.yaml
-      rules:
-        - allow: [User]
-
-    - type: file
-      target: /app/catalog-info.yaml
-
-    - type: file
-      target: /app/catalog/components/reference-services.yaml
-      rules:
-        - allow: [Component]
+      target: /app/catalog/bootstrap.yaml
 
     - type: file
       target: /app/catalog/templates/nestjs-api/template.yaml
@@ -118,3 +95,6 @@ catalog:
       target: /app/catalog/templates/nextjs-fullstack/template.yaml
       rules:
         - allow: [Template]
+
+permission:
+  enabled: true

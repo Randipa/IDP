@@ -14,32 +14,7 @@ backend:
 catalog:
   locations:
     - type: file
-      target: ../../catalog-info.yaml
-
-    - type: file
-      target: ../../catalog/org/groups.yaml
-      rules:
-        - allow: [Group]
-
-    - type: file
-      target: ../../catalog/org/users.yaml
-      rules:
-        - allow: [User]
-
-    - type: file
-      target: ../../catalog/systems.yaml
-      rules:
-        - allow: [System, Domain]
-
-    - type: file
-      target: ../../catalog/resources.yaml
-      rules:
-        - allow: [Resource]
-
-    - type: file
-      target: ../../catalog/components/reference-services.yaml
-      rules:
-        - allow: [Component]
+      target: ../../catalog/bootstrap.yaml
 
     - type: file
       target: ../../catalog/templates/nestjs-api/template.yaml
