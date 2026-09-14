@@ -31,6 +31,8 @@ backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
 
 backend.add(import('./modules/disableHstsModule'));
 
+backend.add(import('./modules/catalogPathCheckModule'));
+
 // catalog plugin
 backend.add(import('@backstage/plugin-catalog-backend'));
 backend.add(

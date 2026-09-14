@@ -203,24 +203,6 @@ idp:
     repository: company-idp
     ref: main
 
-catalog:
-  import:
-    entityFilename: catalog-info.yaml
-    pullRequestBranchName: backstage-integration
-  rules:
-    - allow:
-        [
-          Component,
-          System,
-          API,
-          Resource,
-          Location,
-          User,
-          Group,
-          Domain,
-          Template,
-        ]
-
 kubernetes:
   # see https://backstage.io/docs/features/kubernetes/configuration for kubernetes configuration options
 
