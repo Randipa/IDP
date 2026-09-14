@@ -250,6 +250,11 @@ catalog:
         - allow: [Component]
 
     - type: file
+      target: ../../catalog/components/backlog.yaml
+      rules:
+        - allow: [Component]
+
+    - type: file
       target: ../../catalog/templates/nestjs-api/template.yaml
       rules:
         - allow: [Template]
