@@ -1,21 +1,16 @@
 import { createBackendModule, coreServices } from '@backstage/backend-plugin-api';
+import type { RequestHandler } from 'express';
 
-function stripHsts(
-  _req: unknown,
-  res: {
-    setHeader: (name: string, value: unknown) => unknown;
-  },
-  next: () => void,
-) {
+const stripHsts: RequestHandler = (_req, res, next) => {
   const original = res.setHeader.bind(res);
-  res.setHeader = (name: string, value: unknown) => {
+  res.setHeader = (name, value) => {
     if (String(name).toLowerCase() === 'strict-transport-security') {
       return res;
     }
     return original(name, value);
   };
   next();
-}
+};
 
 export default createBackendModule({
   pluginId: 'app',
