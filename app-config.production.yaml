@@ -57,6 +57,22 @@ auth:
             - resolver: emailMatchingUserEntityProfileEmail
 
 catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow:
+        [
+          Component,
+          System,
+          API,
+          Resource,
+          Location,
+          User,
+          Group,
+          Domain,
+          Template,
+        ]
   locations:
     - type: file
       target: ./catalog-info.yaml

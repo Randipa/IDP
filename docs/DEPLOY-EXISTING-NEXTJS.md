@@ -273,20 +273,45 @@ GitHub → **Actions** tab eke workflow run balanna.
 
 ## Step 8 — Backstage eke register karanna (optional)
 
-### Option A — Automatic (repo already has `catalog-info.yaml`)
+### Option A — Register Existing Component (UI)
 
-IDP `app-config.yaml` eke GitHub discovery add karanna, or manual location:
+1. **Create** → **Register Existing Component** (or open `/catalog-import`)
+2. URL eka **exactly** me format walata danna:
+
+```
+https://github.com/Randipa/IDPWebTest/blob/main/catalog-info.yaml
+```
+
+Repo root URL (`https://github.com/Randipa/IDPWebTest`) puluwan — namut repo eke root eke `catalog-info.yaml` thiyenna one.
+
+3. **Analyze** → preview balanna → last step eke **Import** click karanna (**Analyze mattam click karanna epa**)
+4. **Catalog** refresh karala balanna — **Backlog Web Application** pennne
+
+**Common mistakes**
+
+| Mistake | Result |
+|---------|--------|
+| `Randipa/backlog` repo URL | Repo **exist ne** — register fail |
+| Analyze only, no **Import** click | Catalog eke add wenne ne |
+| Private repo + no `GITHUB_TOKEN` | Fetch fail |
+| Wrong branch (`main` vs `master`) | 404 |
+
+**Important:** `IDPWebTest` repo eke `catalog-info.yaml` thiyenawa, namut `github.com/project-slug` annotation eke `Randipa/backlog` kiyala thiyenawa — eka **`Randipa/IDPWebTest`** kiyala fix karanna (CI/CD tab ekata).
+
+### Option B — IDP config eke location add karanna (platform team)
+
+`app-config.production.yaml`:
 
 ```yaml
 catalog:
   locations:
     - type: url
-      target: https://github.com/YOUR_ORG/my-nextjs-app/blob/main/catalog-info.yaml
+      target: https://github.com/Randipa/IDPWebTest/blob/main/catalog-info.yaml
 ```
 
-Backstage restart → Catalog eke component pennne.
+Redeploy IDP → component auto-ingest wenawa.
 
-### Option B — Backstage Create template
+### Option C — Backstage Create template
 
 Greenfield project nam **Create** → **Next.js Fullstack Application** use karanna puluwan — me guide existing project walata.
 

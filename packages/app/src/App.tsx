@@ -1,5 +1,6 @@
 import { createApp } from '@backstage/frontend-defaults';
 import catalogPlugin from '@backstage/plugin-catalog/alpha';
+import catalogImportPlugin from '@backstage/plugin-catalog-import/alpha';
 import githubActionsPlugin from '@backstage-community/plugin-github-actions/alpha';
 import sonarqubePlugin from '@backstage-community/plugin-sonarqube/alpha';
 import { navModule } from './modules/nav';
@@ -11,6 +12,7 @@ export default createApp({
   features: [
     authModule,
     catalogPlugin,
+    catalogImportPlugin,
     githubActionsPlugin,
     sonarqubePlugin,
     awsPlatformModule,
