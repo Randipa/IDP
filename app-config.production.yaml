@@ -60,7 +60,7 @@ auth:
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
-            - resolver: emailMatchingUserEntityProfileEmail
+              dangerouslyAllowSignInWithoutUserInCatalog: true
 
 catalog:
   orphanStrategy: delete
