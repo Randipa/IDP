@@ -54,3 +54,9 @@ e2e-test-report/
 
 # Cache
 .cache/
+
+# SST generated state, platform SDK, and local outputs (never commit)
+.sst/
+**/.sst/
+sst-env.d.ts
+**/sst-env.d.ts
