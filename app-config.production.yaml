@@ -61,6 +61,7 @@ auth:
             - resolver: emailMatchingUserEntityProfileEmail
 
 catalog:
+  orphanStrategy: delete
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
@@ -103,11 +104,6 @@ catalog:
 
     - type: file
       target: ./catalog/components/reference-services.yaml
-      rules:
-        - allow: [Component]
-
-    - type: file
-      target: ./catalog/components/backlog.yaml
       rules:
         - allow: [Component]
 
