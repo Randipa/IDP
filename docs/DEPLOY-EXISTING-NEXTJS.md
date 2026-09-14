@@ -279,7 +279,7 @@ GitHub → **Actions** tab eke workflow run balanna.
 2. URL eka **exactly** me format walata danna:
 
 ```
-https://github.com/Randipa/IDPWebTest/blob/main/catalog-info.yaml
+https://github.com/Randipa/IDPCatlog/blob/main/catalog-info.yaml
 ```
 
 Repo root URL (`https://github.com/Randipa/IDPWebTest`) puluwan — namut repo eke root eke `catalog-info.yaml` thiyenna one.
@@ -291,6 +291,7 @@ Repo root URL (`https://github.com/Randipa/IDPWebTest`) puluwan — namut repo e
 
 | Mistake | Result |
 |---------|--------|
+| `raw.githubusercontent.com/...` URL | **Not allowed** — use `github.com/.../blob/...` instead |
 | `Randipa/backlog` repo URL | Repo **exist ne** — register fail |
 | Analyze only, no **Import** click | Catalog eke add wenne ne |
 | Private repo + no `GITHUB_TOKEN` | Fetch fail |

@@ -6,6 +6,10 @@ backend:
   baseUrl: ${IDP_PUBLIC_URL}
   listen: ':7007'
   trustProxy: true
+  reading:
+    allow:
+      - host: github.com
+      - host: raw.githubusercontent.com
   auth:
     keys:
       - secret: ${BACKEND_SECRET}
@@ -112,6 +116,8 @@ catalog:
       rules:
         - allow: [Template]
 
-    # Client app — loaded from GitHub on every IDP start (do not use Register UI for this)
+    # Client app — GitHub blob URL (not raw.githubusercontent.com)
     - type: url
-      target: https://raw.githubusercontent.com/Randipa/IDPCatlog/main/catalog-info.yaml
+      target: https://github.com/Randipa/IDPCatlog/blob/main/catalog-info.yaml
+      rules:
+        - allow: [Component]
