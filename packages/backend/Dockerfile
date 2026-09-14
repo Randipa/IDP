@@ -59,5 +59,7 @@ RUN tar xzf bundle.tar.gz && rm bundle.tar.gz
 
 COPY --chown=node:node catalog ./catalog
 COPY --chown=node:node catalog-info.yaml ./catalog-info.yaml
+COPY --chown=node:node catalog ./packages/backend/catalog
+COPY --chown=node:node catalog-info.yaml ./packages/backend/catalog-info.yaml
 
 CMD ["node", "packages/backend", "--config", "app-config.yaml", "--config", "app-config.production.yaml"]
