@@ -111,3 +111,7 @@ catalog:
       target: ./catalog/templates/nextjs-fullstack/template.yaml
       rules:
         - allow: [Template]
+
+    # Client app — loaded from GitHub on every IDP start (do not use Register UI for this)
+    - type: url
+      target: https://raw.githubusercontent.com/Randipa/IDPCatlog/main/catalog-info.yaml
