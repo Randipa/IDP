@@ -62,4 +62,4 @@ COPY --chown=node:node app-config*.yaml ./
 COPY --chown=node:node catalog ./catalog
 COPY --chown=node:node catalog-info.yaml ./catalog-info.yaml
 
-CMD ["node", "packages/backend", "--config", "app-config.production.yaml"]
+CMD ["node", "packages/backend", "--config", "app-config.yaml", "--config", "app-config.production.yaml"]
