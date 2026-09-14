@@ -9,8 +9,7 @@ metadata:
     - idp
     - platform
   annotations:
-    backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: company/company-idp
+    github.com/project-slug: Randipa/IDP
 spec:
   type: website
   lifecycle: production

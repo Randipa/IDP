@@ -63,7 +63,6 @@ auth:
               dangerouslyAllowSignInWithoutUserInCatalog: true
 
 catalog:
-  orphanStrategy: delete
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
@@ -81,18 +80,11 @@ catalog:
           Template,
         ]
   locations:
-    - type: file
-      target: /app/catalog-info.yaml
-
+    # Order matters: groups/systems before components that reference them
     - type: file
       target: /app/catalog/org/groups.yaml
       rules:
         - allow: [Group]
-
-    - type: file
-      target: /app/catalog/org/users.yaml
-      rules:
-        - allow: [User]
 
     - type: file
       target: /app/catalog/systems.yaml
@@ -103,6 +95,14 @@ catalog:
       target: /app/catalog/resources.yaml
       rules:
         - allow: [Resource]
+
+    - type: file
+      target: /app/catalog/org/users.yaml
+      rules:
+        - allow: [User]
+
+    - type: file
+      target: /app/catalog-info.yaml
 
     - type: file
       target: /app/catalog/components/reference-services.yaml
