@@ -22,19 +22,14 @@ export default createBackendModule({
                 throw new Error('GitHub profile did not contain a username');
               }
 
-              try {
-                return await ctx.signInWithCatalogUser({
-                  entityRef: { name: username },
-                });
-              } catch {
-                const userRef = `user:default/${username}`;
-                return ctx.issueToken({
-                  claims: {
-                    sub: userRef,
-                    ent: [userRef],
+              return ctx.signInWithCatalogUser(
+                { entityRef: { name: username } },
+                {
+                  dangerousEntityRefFallback: {
+                    entityRef: { name: username },
                   },
-                });
-              }
+                },
+              );
             },
           }),
         });
