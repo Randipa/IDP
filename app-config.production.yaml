@@ -82,39 +82,39 @@ catalog:
         ]
   locations:
     - type: file
-      target: ./catalog-info.yaml
+      target: /app/catalog-info.yaml
 
     - type: file
-      target: ./catalog/org/groups.yaml
+      target: /app/catalog/org/groups.yaml
       rules:
         - allow: [Group]
 
     - type: file
-      target: ./catalog/org/users.yaml
+      target: /app/catalog/org/users.yaml
       rules:
         - allow: [User]
 
     - type: file
-      target: ./catalog/systems.yaml
+      target: /app/catalog/systems.yaml
       rules:
         - allow: [System, Domain]
 
     - type: file
-      target: ./catalog/resources.yaml
+      target: /app/catalog/resources.yaml
       rules:
         - allow: [Resource]
 
     - type: file
-      target: ./catalog/components/reference-services.yaml
+      target: /app/catalog/components/reference-services.yaml
       rules:
         - allow: [Component]
 
     - type: file
-      target: ./catalog/templates/nestjs-api/template.yaml
+      target: /app/catalog/templates/nestjs-api/template.yaml
       rules:
         - allow: [Template]
 
     - type: file
-      target: ./catalog/templates/nextjs-fullstack/template.yaml
+      target: /app/catalog/templates/nextjs-fullstack/template.yaml
       rules:
         - allow: [Template]
