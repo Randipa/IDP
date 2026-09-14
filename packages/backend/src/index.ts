@@ -29,8 +29,6 @@ backend.add(import('@backstage/plugin-auth-backend'));
 backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
 backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
 
-backend.add(import('./modules/disableHstsModule'));
-
 backend.add(import('./modules/catalogPathCheckModule'));
 
 // catalog plugin

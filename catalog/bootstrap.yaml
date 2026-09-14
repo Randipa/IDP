@@ -163,6 +163,7 @@ spec:
     displayName: Frontend Lead
     email: frontend-lead@company.com
   memberOf: [frontend]
+---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
