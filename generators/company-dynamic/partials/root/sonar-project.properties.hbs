@@ -1,0 +1,10 @@
+sonar.projectKey={{name}}
+sonar.projectName={{name}}
+sonar.sourceEncoding=UTF-8
+
+sonar.sources={{backendDir}}/src{{#if includeClient}},{{clientPath}}{{/if}}{{#if includeAdmin}},{{adminPath}}/src{{/if}}
+sonar.tests={{backendDir}}/src{{#if (eq backendFramework "nestjs")}},{{backendDir}}/test{{/if}}{{#if includeClient}},{{clientPath}}{{/if}}
+sonar.exclusions=**/node_modules/**,**/dist/**,**/.next/**,**/.sst/**
+sonar.test.inclusions=**/*.spec.ts,**/*.test.ts,**/*.test.js,**/*.e2e-spec.ts
+sonar.javascript.lcov.reportPaths={{backendDir}}/coverage/lcov.info{{#if includeClient}},{{clientPath}}/coverage/lcov.info{{/if}}
+sonar.qualitygate.wait=true

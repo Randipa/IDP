@@ -1,0 +1,33 @@
+{
+  "name": "{{name}}",
+  "version": "0.1.0",
+  "private": true,
+  "description": "{{description}}",
+  "workspaces": [
+    "{{backendDir}}"{{#if includeClient}},
+    "{{clientPath}}"{{/if}}{{#if includeAdmin}},
+    "{{adminPath}}"{{/if}}
+  ],
+  "scripts": {
+    "dev:backend": "npm run {{#if (eq backendFramework 'nestjs')}}start:dev{{else}}dev{{/if}} -w {{backendPackageName}}"{{#if includeClient}},
+    "dev:client": "npm run dev -w {{clientPackageName}}"{{/if}}{{#if includeAdmin}},
+    "dev:admin": "npm run dev -w {{adminPackageName}}"{{/if}},
+    "dev": "concurrently \"npm:dev:backend\"{{#if includeClient}} \"npm:dev:client\"{{/if}}{{#if includeAdmin}} \"npm:dev:admin\"{{/if}}",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:cov": "npm run test:cov --workspaces --if-present",
+    "deploy": "sst deploy",
+    "deploy:dev": "sst deploy --stage dev",
+    "deploy:staging": "sst deploy --stage staging",
+    "deploy:prod": "sst deploy --stage production"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "sst": "^3.4.0",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

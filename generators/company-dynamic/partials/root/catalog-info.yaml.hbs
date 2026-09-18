@@ -1,0 +1,31 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: {{name}}
+  title: {{name}}
+  description: {{description}}
+  tags:
+    - monorepo
+    - {{backendFramework}}
+{{#if includeClient}}
+    - {{clientFramework}}
+{{/if}}{{#if includeAdmin}}
+    - react
+    - admin
+{{/if}}
+    - sst
+    - aws
+  annotations:
+    github.com/project-slug: {{githubOrg}}/{{githubRepo}}
+    backstage.io/techdocs-ref: dir:.
+    sonarqube.org/project-key: {{name}}
+    company.io/aws-region: {{awsRegion}}
+    company.io/sst-stages: dev,staging,production
+spec:
+  type: website
+  lifecycle: experimental
+  owner: {{owner}}
+  system: client-delivery
+  dependsOn:
+    - resource:default/aws-main-account
+    - resource:default/github-organization

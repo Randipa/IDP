@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: read
+
+concurrency:
+  group: {{gha 'github.workflow'}}-{{gha 'github.ref'}}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    uses: {{idpRepo}}/.github/workflows/reusable-quality.yml@{{idpRef}}
+    with:
+      test-command: npm run test:cov
+
+  security:
+    uses: {{idpRepo}}/.github/workflows/reusable-security.yml@{{idpRef}}

@@ -6,8 +6,8 @@ export default $config({
 
     return {
       name: isSonarQube ? 'company-idp-sonarqube' : 'company-idp-platform',
-      removal: input?.stage === 'platform' || isSonarQube ? 'retain' : 'remove',
-      protect: input?.stage === 'platform' || isSonarQube,
+      removal: input?.stage === 'platform' ? 'retain' : 'remove',
+      protect: input?.stage === 'platform',
       home: 'aws',
       providers: {
         aws: {

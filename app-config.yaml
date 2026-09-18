@@ -133,16 +133,9 @@ backend:
       - scaffolder
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
-integrations:
-  github:
-    - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
-      token: ${GITHUB_TOKEN}
-    ### Example for how to add your GitHub Enterprise instance using the API:
-    # - host: ghe.example.net
-    #   apiBaseUrl: https://ghe.example.net/api/v3
-    #   token: ${GHE_TOKEN}
+# GitHub integration and SonarQube are configured in app-config.local.yaml when
+# GITHUB_TOKEN / SONARQUBE_API_KEY are available. Empty env substitution breaks
+# backend startup, so they are not referenced here.
 
 proxy:
   ### Example for how to add a proxy endpoint for the frontend.
@@ -151,11 +144,6 @@ proxy:
   #   '/test':
   #     target: 'https://example.com'
   #     changeOrigin: true
-
-sonarqube:
-  baseUrl: ${SONARQUBE_BASE_URL}
-  externalBaseUrl: ${SONARQUBE_EXTERNAL_URL}
-  apiKey: ${SONARQUBE_API_KEY}
 
 # Reference documentation http://backstage.io/docs/features/techdocs/configuration
 # Note: After experimenting with basic setup, use CI/CD to generate docs
@@ -177,6 +165,8 @@ auth:
       development:
         clientId: ${AUTH_GITHUB_CLIENT_ID}
         clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+        additionalScopes:
+          - user:email
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
@@ -196,6 +186,44 @@ auth:
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
+
+catalog:
+  rules:
+    - allow:
+        [
+          Component,
+          System,
+          API,
+          Resource,
+          Location,
+          User,
+          Group,
+          Domain,
+          Template,
+        ]
+  locations:
+    - type: file
+      target: ../../catalog/bootstrap.yaml
+
+    - type: file
+      target: ../../catalog/templates/nestjs-api/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../catalog/templates/nextjs-fullstack/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../catalog/templates/company-monorepo/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../catalog/templates/company-dynamic/template.yaml
+      rules:
+        - allow: [Template]
 
 idp:
   github:

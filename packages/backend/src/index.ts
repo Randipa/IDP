@@ -30,6 +30,7 @@ backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
 backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
 
 backend.add(import('./modules/catalogPathCheckModule'));
+backend.add(import('./modules/companyGeneratorModule'));
 
 // catalog plugin
 backend.add(import('@backstage/plugin-catalog-backend'));

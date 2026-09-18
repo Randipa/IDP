@@ -1,0 +1,82 @@
+# Copy to ci-extended.yml after adding repo secrets:
+#   SONAR_TOKEN, SONAR_HOST_URL, AWS_ROLE_ARN
+# GitHub repo → Settings → Secrets and variables → Actions
+
+name: CI Extended
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: SST stage to deploy
+        required: true
+        default: production
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: {{gha 'github.workflow'}}-{{gha 'github.ref'}}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    uses: {{idpRepo}}/.github/workflows/reusable-quality.yml@{{idpRef}}
+    with:
+      test-command: npm run test:cov
+
+  security:
+    uses: {{idpRepo}}/.github/workflows/reusable-security.yml@{{idpRef}}
+
+  sonarqube:
+    needs: [quality, security]
+    uses: {{idpRepo}}/.github/workflows/reusable-sonarqube.yml@{{idpRef}}
+    with:
+      test-command: npm run test:cov
+      fail-on-quality-gate: {{gha "github.event_name == 'workflow_dispatch' && github.event.inputs.stage == 'production'"}}
+    secrets:
+      SONAR_TOKEN: {{gha 'secrets.SONAR_TOKEN'}}
+      SONAR_HOST_URL: {{gha 'secrets.SONAR_HOST_URL'}}
+
+  deploy-dev:
+    name: Deploy dev
+    needs: [quality, security]
+    if: {{gha "github.event_name == 'push' && github.ref_name == 'develop'"}}
+    uses: {{idpRepo}}/.github/workflows/reusable-deploy-sst.yml@{{idpRef}}
+    with:
+      stage: dev
+      aws-region: {{awsRegion}}
+    secrets:
+      AWS_ROLE_ARN: {{gha 'secrets.AWS_ROLE_ARN'}}
+
+  deploy-staging:
+    name: Deploy staging
+    needs: [quality, security, sonarqube]
+    if: {{gha "github.event_name == 'push' && github.ref_name == 'main'"}}
+    uses: {{idpRepo}}/.github/workflows/reusable-deploy-sst.yml@{{idpRef}}
+    with:
+      stage: staging
+      aws-region: {{awsRegion}}
+    secrets:
+      AWS_ROLE_ARN: {{gha 'secrets.AWS_ROLE_ARN'}}
+
+  deploy-production:
+    name: Deploy production
+    needs: [quality, security, sonarqube]
+    if: {{gha "github.event_name == 'workflow_dispatch' && github.event.inputs.stage == 'production'"}}
+    uses: {{idpRepo}}/.github/workflows/reusable-deploy-sst.yml@{{idpRef}}
+    with:
+      stage: production
+      aws-region: {{awsRegion}}
+    secrets:
+      AWS_ROLE_ARN: {{gha 'secrets.AWS_ROLE_ARN'}}

@@ -1,5 +1,7 @@
 # Copy to app-config.local.yaml for persistent local development with PostgreSQL.
 # cp app-config.local.yaml.example app-config.local.yaml
+#
+# Optional: uncomment integrations / sonarqube when the matching .env values are set.
 
 backend:
   database:
@@ -10,6 +12,16 @@ backend:
       user: ${POSTGRES_USER}
       password: ${POSTGRES_PASSWORD}
       database: ${POSTGRES_DB}
+
+# integrations:
+#   github:
+#     - host: github.com
+#       token: ${GITHUB_TOKEN}
+#
+# sonarqube:
+#   baseUrl: ${SONARQUBE_BASE_URL}
+#   externalBaseUrl: ${SONARQUBE_EXTERNAL_URL}
+#   apiKey: ${SONARQUBE_API_KEY}
 
 catalog:
   locations:
@@ -23,5 +35,15 @@ catalog:
 
     - type: file
       target: ../../catalog/templates/nextjs-fullstack/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../catalog/templates/company-monorepo/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../catalog/templates/company-dynamic/template.yaml
       rules:
         - allow: [Template]

@@ -1,5 +1,5 @@
 
-  .sst/platform/sst.config.1789292259594.mjs ────────────────────────────────────── 913.8kb ─ 100.0%
+  .sst/platform/sst.config.1789759327700.mjs ────────────────────────────────────── 914.4kb ─ 100.0%
    ├ .sst/platform/src/components/aws/ssr-site.ts ────────────────────────────────── 43.0kb ─── 4.7%
    │  └ .sst/platform/src/components/aws/svelte-kit.ts
    │     └ .sst/platform/src/components/aws/index.ts
@@ -572,6 +572,9 @@
    │           └ lib/sonarqube-stack.ts
    │              └ sst.config.ts
    │                 └ eval.ts
+   ├ lib/platform-stack.ts ────────────────────────────────────────────────────────── 2.3kb ─── 0.3%
+   │  └ sst.config.ts
+   │     └ eval.ts
    ├ .sst/platform/src/components/aws/apigatewayv1-usage-plan.ts ──────────────────── 2.3kb ─── 0.3%
    │  └ .sst/platform/src/components/aws/apigatewayv1.ts
    │     └ .sst/platform/src/components/aws/index.ts
@@ -641,9 +644,6 @@
    │                 └ eval.ts
    ├ .sst/platform/src/auto/run.ts ────────────────────────────────────────────────── 1.9kb ─── 0.2%
    │  └ eval.ts
-   ├ lib/platform-stack.ts ────────────────────────────────────────────────────────── 1.9kb ─── 0.2%
-   │  └ sst.config.ts
-   │     └ eval.ts
    ├ .sst/platform/src/components/aws/apigatewayv2-private-route.ts ───────────────── 1.9kb ─── 0.2%
    │  └ .sst/platform/src/components/aws/apigatewayv2.ts
    │     └ .sst/platform/src/components/aws/index.ts
@@ -723,6 +723,9 @@
    │        └ lib/sonarqube-stack.ts
    │           └ sst.config.ts
    │              └ eval.ts
+   ├ lib/sonarqube-stack.ts ───────────────────────────────────────────────────────── 1.5kb ─── 0.2%
+   │  └ sst.config.ts
+   │     └ eval.ts
    ├ .sst/platform/src/components/aws/apigatewayv1-api-key.ts ─────────────────────── 1.5kb ─── 0.2%
    │  └ .sst/platform/src/components/aws/apigatewayv1-usage-plan.ts
    │     └ .sst/platform/src/components/aws/apigatewayv1.ts
@@ -744,9 +747,6 @@
    │        └ lib/sonarqube-stack.ts
    │           └ sst.config.ts
    │              └ eval.ts
-   ├ lib/sonarqube-stack.ts ───────────────────────────────────────────────────────── 1.4kb ─── 0.1%
-   │  └ sst.config.ts
-   │     └ eval.ts
    ├ .sst/platform/src/components/aws/apigatewayv1-base-route.ts ──────────────────── 1.4kb ─── 0.1%
    │  └ .sst/platform/src/components/aws/apigatewayv1-integration-route.ts
    │     └ .sst/platform/src/components/aws/apigatewayv1.ts
@@ -813,8 +813,6 @@
    │        └ lib/sonarqube-stack.ts
    │           └ sst.config.ts
    │              └ eval.ts
-   ├ sst.config.ts ────────────────────────────────────────────────────────────────── 970b ──── 0.1%
-   │  └ eval.ts
    ├ .sst/platform/src/components/aws/helpers/site-builder.ts ─────────────────────── 962b ──── 0.1%
    │  └ .sst/platform/src/components/base/base-static-site.ts
    │     └ .sst/platform/src/components/cloudflare/static-site.ts
@@ -823,6 +821,8 @@
    │              └ lib/sonarqube-stack.ts
    │                 └ sst.config.ts
    │                    └ eval.ts
+   ├ sst.config.ts ────────────────────────────────────────────────────────────────── 940b ──── 0.1%
+   │  └ eval.ts
    ├ .sst/platform/src/components/aws/step-functions/pass.ts ──────────────────────── 891b ──── 0.1%
    │  └ .sst/platform/src/components/aws/step-functions.ts
    │     └ .sst/platform/src/components/aws/index.ts
@@ -979,6 +979,8 @@
    │           └ lib/sonarqube-stack.ts
    │              └ sst.config.ts
    │                 └ eval.ts
+   ├ <define:$cli> ────────────────────────────────────────────────────────────────── 495b ──── 0.1%
+   │  └ eval.ts
    ├ .sst/platform/src/components/aws/providers/kv-keys.ts ────────────────────────── 444b ──── 0.0%
    │  └ .sst/platform/src/components/aws/static-site.ts
    │     └ .sst/platform/src/components/aws/index.ts
@@ -987,15 +989,13 @@
    │              └ sst.config.ts
    │                 └ eval.ts
    ├ .sst/platform/src/shim/run.js ────────────────────────────────────────────────── 432b ──── 0.0%
-   ├ <define:$app> ────────────────────────────────────────────────────────────────── 400b ──── 0.0%
+   ├ <define:$app> ────────────────────────────────────────────────────────────────── 405b ──── 0.0%
    │  └ eval.ts
    ├ .sst/platform/src/components/cloudflare/index.ts ─────────────────────────────── 389b ──── 0.0%
    │  └ .sst/platform/src/components/index.ts
    │     └ lib/sonarqube-stack.ts
    │        └ sst.config.ts
    │           └ eval.ts
-   ├ <define:$cli> ────────────────────────────────────────────────────────────────── 386b ──── 0.0%
-   │  └ eval.ts
    ├ .sst/platform/src/components/cpu.ts ──────────────────────────────────────────── 358b ──── 0.0%
    │  └ .sst/platform/src/components/aws/fargate.ts
    │     └ .sst/platform/src/components/aws/task.ts

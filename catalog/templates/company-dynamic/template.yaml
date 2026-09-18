@@ -1,0 +1,212 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: company-dynamic
+  title: Company Dynamic Monorepo (Plop)
+  description: >-
+    Build a custom company monorepo on-the-fly. Choose backend, client,
+    and admin options and the Plop generator assembles the folder structure.
+  tags:
+    - recommended
+    - monorepo
+    - plop
+    - dynamic
+    - nestjs
+    - express
+    - nextjs
+    - react
+  links:
+    - url: https://plopjs.com/
+      title: Plop.js Documentation
+spec:
+  owner: group:default/platform
+  type: website
+
+  parameters:
+    - title: Project details
+      required:
+        - name
+        - description
+        - owner
+      properties:
+        name:
+          title: Project name
+          type: string
+          description: Unique name used for the repository, SST app, and catalog entity.
+          ui:field: EntityNamePicker
+          ui:autofocus: true
+        description:
+          title: Description
+          type: string
+          description: Short description of the application.
+        owner:
+          title: Owner
+          type: string
+          description: Team responsible for this project.
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+
+    - title: Architecture options
+      required:
+        - backendFramework
+        - includeClient
+        - clientFramework
+        - includeAdmin
+      properties:
+        backendFramework:
+          title: Backend framework
+          type: string
+          default: nestjs
+          enum:
+            - nestjs
+            - express
+          enumNames:
+            - NestJS API
+            - Express API
+        includeClient:
+          title: Include client app
+          type: boolean
+          default: true
+          description: Generate a public-facing frontend app.
+        clientFramework:
+          title: Client framework
+          type: string
+          default: nextjs
+          enum:
+            - nextjs
+            - react-vite
+            - none
+          enumNames:
+            - Next.js (App Router)
+            - React + Vite SPA
+            - None
+        includeAdmin:
+          title: Include admin dashboard
+          type: boolean
+          default: true
+          description: Generate an internal admin dashboard (React + Vite).
+
+    - title: Folder structure
+      properties:
+        backendDir:
+          title: Backend folder name
+          type: string
+          default: backend
+          description: Root folder for the API service (e.g. backend, api, backend-idp).
+          pattern: '^[a-z][a-z0-9-]*$'
+        frontendDir:
+          title: Frontend folder name
+          type: string
+          default: frontend
+          description: Root folder for all frontend apps (e.g. frontend, frontend-idp, web).
+          pattern: '^[a-z][a-z0-9-]*$'
+        packagesDir:
+          title: Apps subfolder name
+          type: string
+          default: packages
+          description: Subfolder inside the frontend folder that holds client and admin (e.g. packages, apps).
+          pattern: '^[a-z][a-z0-9-]*$'
+        clientDir:
+          title: Client folder name
+          type: string
+          default: client
+          description: Client app folder inside frontend/apps (e.g. client, web).
+          pattern: '^[a-z][a-z0-9-]*$'
+        adminDir:
+          title: Admin folder name
+          type: string
+          default: admin
+          description: Admin app folder inside frontend/apps (e.g. admin, dashboard).
+          pattern: '^[a-z][a-z0-9-]*$'
+
+    - title: Repository
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+    - title: AWS configuration
+      required:
+        - awsRegion
+      properties:
+        awsRegion:
+          title: AWS Region
+          type: string
+          default: ap-south-1
+          enum:
+            - ap-south-1
+            - us-east-1
+            - eu-west-1
+            - ap-southeast-1
+          enumNames:
+            - Asia Pacific (Mumbai)
+            - US East (N. Virginia)
+            - Europe (Ireland)
+            - Asia Pacific (Singapore)
+
+  steps:
+    - id: generate
+      name: Run Plop generator
+      action: company:run-generator
+      input:
+        name: ${{ parameters.name }}
+        description: ${{ parameters.description }}
+        owner: ${{ parameters.owner }}
+        awsRegion: ${{ parameters.awsRegion }}
+        githubOrg: ${{ parameters.repoUrl | parseRepoUrl | pick('owner') }}
+        githubRepo: ${{ parameters.repoUrl | parseRepoUrl | pick('repo') }}
+        idpRepo: ${{ parameters.repoUrl | parseRepoUrl | pick('owner') }}/IDP
+        idpRef: main
+        backendFramework: ${{ parameters.backendFramework }}
+        includeClient: ${{ parameters.includeClient }}
+        clientFramework: ${{ parameters.clientFramework }}
+        includeAdmin: ${{ parameters.includeAdmin }}
+        backendDir: ${{ parameters.backendDir }}
+        frontendDir: ${{ parameters.frontendDir }}
+        packagesDir: ${{ parameters.packagesDir }}
+        clientDir: ${{ parameters.clientDir }}
+        adminDir: ${{ parameters.adminDir }}
+
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        description: ${{ parameters.description }}
+        defaultBranch: main
+        gitCommitMessage: 'chore: bootstrap dynamic company monorepo from Company IDP'
+        repoVisibility: private
+
+    - id: register
+      name: Register in catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+    - id: notify
+      name: Notify owner
+      action: notification:send
+      input:
+        recipients: entity
+        entityRefs:
+          - user:default/platform-lead
+        title: Dynamic company monorepo created
+        info: '${{ parameters.name }} was generated with Plop and published to GitHub.'
+        severity: normal
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps['publish'].output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps['register'].output.entityRef }}
