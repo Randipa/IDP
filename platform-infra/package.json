@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "@pulumi/aws": "^6.66.0",
-    "sst": "^3.4.0",
+    "sst": "^4.17.1",
     "typescript": "^7.0.2"
   }
 }
