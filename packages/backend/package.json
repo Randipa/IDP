@@ -42,7 +42,7 @@
     "@backstage/plugin-search-backend": "^2.1.5",
     "@backstage/plugin-search-backend-module-catalog": "^0.3.18",
     "@backstage/plugin-search-backend-module-pg": "^0.5.58",
-    "@backstage/plugin-search-backend-module-techdocs": "^0.4.17",
+    "@backstage/plugin-search-backend-module-techdocs": "^0.4.18",
     "@backstage/plugin-search-backend-node": "^1.4.7",
     "@backstage/plugin-signals-backend": "^0.3.18",
     "@backstage/plugin-techdocs-backend": "^2.2.3",
