@@ -33,24 +33,33 @@ npm run dev
 
 ## CI/CD
 
-Default GitHub Actions workflow runs **quality + security** checks only (no repo secrets required).
+**CI** (`.github/workflows/ci.yml`) runs quality + security on every push — no secrets required.
 
-After adding these secrets in GitHub → Settings → Secrets and variables → Actions:
+**Deploy** (`.github/workflows/deploy.yml`) deploys to AWS with SST:
 
-| Secret | Used for |
-|--------|----------|
-| `SONAR_TOKEN` | SonarQube analysis |
-| `SONAR_HOST_URL` | SonarQube server URL |
-| `AWS_ROLE_ARN` | SST deploy to AWS |
+| Trigger | SST stage |
+|---------|-----------|
+| Push to `develop` | `dev` |
+| Push to `main` | `staging` |
+| Manual workflow dispatch | `production` |
 
-Copy the extended pipeline:
+Before deploy works, add this repo secret in GitHub → **Settings** → **Secrets and variables** → **Actions**:
+
+| Secret | Value |
+|--------|-------|
+| `AWS_ROLE_ARN` | IAM role from `platform-infra` deploy (e.g. `company-idp-github-deploy-staging`) |
+
+Deploy the platform roles once:
 
 ```sh
-cp .github/workflows/ci-extended.yml.example .github/workflows/ci-extended.yml
-git add .github/workflows/ci-extended.yml
-git commit -m "ci: enable SonarQube and deploy pipeline"
-git push
+cd platform-infra
+npm install
+cp .env.example .env   # set GITHUB_ORG=Randipa
+export $(grep -v '^#' .env | xargs)
+npm run deploy:platform
 ```
+
+Optional SonarQube pipeline: copy `.github/workflows/ci-extended.yml.example` → `ci-extended.yml` and add `SONAR_TOKEN` + `SONAR_HOST_URL` secrets.
 
 Reusable workflows are loaded from `{{idpRepo}}` at ref `{{idpRef}}`.
 

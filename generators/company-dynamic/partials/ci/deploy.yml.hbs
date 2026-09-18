@@ -1,0 +1,57 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: SST stage to deploy
+        required: true
+        default: staging
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: {{gha 'github.workflow'}}-{{gha 'github.ref'}}
+  cancel-in-progress: true
+
+jobs:
+  deploy-dev:
+    name: Deploy dev
+    if: {{gha "github.event_name == 'push' && github.ref_name == 'develop'"}}
+    uses: {{idpRepo}}/.github/workflows/reusable-deploy-sst.yml@{{idpRef}}
+    with:
+      stage: dev
+      aws-region: {{awsRegion}}
+    secrets:
+      AWS_ROLE_ARN: {{gha 'secrets.AWS_ROLE_ARN'}}
+
+  deploy-staging:
+    name: Deploy staging
+    if: {{gha "github.event_name == 'push' && github.ref_name == 'main'"}}
+    uses: {{idpRepo}}/.github/workflows/reusable-deploy-sst.yml@{{idpRef}}
+    with:
+      stage: staging
+      aws-region: {{awsRegion}}
+    secrets:
+      AWS_ROLE_ARN: {{gha 'secrets.AWS_ROLE_ARN'}}
+
+  deploy-production:
+    name: Deploy production
+    if: {{gha "github.event_name == 'workflow_dispatch' && github.event.inputs.stage == 'production'"}}
+    uses: {{idpRepo}}/.github/workflows/reusable-deploy-sst.yml@{{idpRef}}
+    with:
+      stage: production
+      aws-region: {{awsRegion}}
+    secrets:
+      AWS_ROLE_ARN: {{gha 'secrets.AWS_ROLE_ARN'}}

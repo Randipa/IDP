@@ -109,6 +109,12 @@ module.exports = function plopfile(plop) {
           templateFile: 'partials/ci/dependabot.yml',
           data: layout,
         },
+        {
+          type: 'add',
+          path: '.github/workflows/deploy.yml',
+          templateFile: 'partials/ci/deploy.yml.hbs',
+          data: layout,
+        },
       ];
 
       if (layout.backendFramework === 'nestjs') {
