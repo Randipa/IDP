@@ -20,7 +20,7 @@ on:
         description: Node.js version
         required: false
         type: string
-        default: '20'
+        default: '22'
     secrets:
       AWS_ROLE_ARN:
         description: IAM role ARN configured for GitHub OIDC
@@ -41,7 +41,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.node-version }}
-          cache: npm
       - name: Install dependencies
         run: |
           if [ -f package-lock.json ]; then

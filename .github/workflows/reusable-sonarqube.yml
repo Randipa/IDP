@@ -7,7 +7,7 @@ on:
         description: Node.js version
         required: false
         type: string
-        default: '20'
+        default: '22'
       working-directory:
         description: Path to the project root
         required: false
@@ -45,7 +45,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.node-version }}
-          cache: npm
       - name: Install dependencies
         run: |
           if [ -f package-lock.json ]; then
