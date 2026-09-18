@@ -11,7 +11,7 @@
     "remove:sonarqube": "sst remove --stage sonarqube"
   },
   "devDependencies": {
-    "@pulumi/aws": "^6.66.0",
+    "@pulumi/aws": "^7.46.0",
     "sst": "^3.4.0",
     "typescript": "^7.0.2"
   }
