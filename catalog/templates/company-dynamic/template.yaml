@@ -181,7 +181,7 @@ spec:
       input:
         repoUrl: ${{ parameters.repoUrl }}
         description: ${{ parameters.description }}
-        defaultBranch: main
+        defaultBranch: develop
         gitCommitMessage: 'chore: bootstrap dynamic company monorepo from Company IDP'
         repoVisibility: private
 

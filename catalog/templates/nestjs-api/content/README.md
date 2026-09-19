@@ -18,6 +18,8 @@ NestJS API service scaffolded from the Company Internal Developer Platform.
 | `staging` | push to `main` | Pre-production validation |
 | `production` | manual workflow dispatch | Live workloads |
 
+New repos start on **`develop`**. Create **`main`** from `develop` when you are ready for staging deploys.
+
 ## Local development
 
 ```sh

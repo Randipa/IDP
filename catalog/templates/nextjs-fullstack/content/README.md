@@ -59,11 +59,14 @@ This application deploys to `${{ values.awsRegion }}`.
 
 ## Branch setup
 
-Create a `develop` branch after scaffolding to enable automatic dev deployments:
+This repository is created on **`develop`** (default branch). Push to `develop` to run CI and deploy to the **dev** SST stage.
+
+When ready for staging, create **`main`**:
 
 ```sh
-git checkout -b develop
-git push -u origin develop
+git checkout develop
+git checkout -b main
+git push -u origin main
 ```
 
 ## Catalog

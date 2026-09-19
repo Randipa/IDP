@@ -21,6 +21,11 @@ on:
         required: false
         type: string
         default: '22'
+      git-ref:
+        description: Git ref (commit SHA) to deploy; defaults to the triggering ref
+        required: false
+        type: string
+        default: ''
     secrets:
       AWS_ROLE_ARN:
         description: IAM role ARN configured for GitHub OIDC
@@ -38,6 +43,8 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git-ref != '' && inputs.git-ref || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.node-version }}

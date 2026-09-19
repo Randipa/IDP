@@ -105,8 +105,8 @@ module.exports = function plopfile(plop) {
         },
         {
           type: 'add',
-          path: '.github/dependabot.yml',
-          templateFile: 'partials/ci/dependabot.yml',
+          path: '.github/dependabot.production.yml.example',
+          templateFile: 'partials/ci/dependabot.production.yml.example',
           data: layout,
         },
         {

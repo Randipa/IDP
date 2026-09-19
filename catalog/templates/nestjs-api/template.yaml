@@ -98,7 +98,7 @@ spec:
       input:
         repoUrl: ${{ parameters.repoUrl }}
         description: ${{ parameters.description }}
-        defaultBranch: main
+        defaultBranch: develop
         gitCommitMessage: 'chore: bootstrap NestJS API from Company IDP'
         repoVisibility: private
 

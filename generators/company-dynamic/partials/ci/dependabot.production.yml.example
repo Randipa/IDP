@@ -1,0 +1,35 @@
+# Production-only Dependabot config (optional).
+#
+# Do NOT enable on dev/staging work — dependency PRs can break CI before deploy.
+# When the app is production-ready:
+#   cp .github/dependabot.production.yml.example .github/dependabot.yml
+#   git add .github/dependabot.yml
+#   git commit -m "chore: enable production dependency updates"
+#   git push
+#
+# Updates target the main branch only.
+
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    target-branch: main
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    labels:
+      - dependencies
+      - production
+
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: main
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    labels:
+      - dependencies
+      - production

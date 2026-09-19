@@ -60,3 +60,7 @@ npm run deploy:prod
 ```
 
 CI/CD uses reusable workflows from the Company IDP repository.
+
+## Branches
+
+The repository is created on **`develop`**. Push to `develop` for dev CI/CD. Create **`main`** from `develop` when ready for staging.

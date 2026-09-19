@@ -78,11 +78,12 @@ Recommended: use GitHub Environments (`dev`, `staging`, `production`) with envir
 | `main` | `staging` | push |
 | manual dispatch | `production` | workflow dispatch |
 
-Create the `develop` branch after scaffolding:
+Create the `main` branch when ready for staging (repos start on `develop`):
 
 ```sh
-git checkout -b develop
-git push -u origin develop
+git checkout develop
+git checkout -b main
+git push -u origin main
 ```
 
 ## Step 5 — Verify

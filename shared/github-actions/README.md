@@ -31,7 +31,6 @@ jobs:
       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
   deploy-dev:
-    needs: [quality, security]
     uses: YOUR_ORG/company-idp/.github/workflows/reusable-deploy-sst.yml@main
     with:
       stage: dev
@@ -60,3 +59,5 @@ Additional analysis secrets (organization or repository scope):
 | `SONAR_TOKEN` | Analysis token from SonarQube |
 
 Deploy jobs should set `environment: dev|staging|production` when using environment-scoped secrets.
+
+Generated service repos use a separate `deploy.yml` triggered by `workflow_run` after the `CI` workflow completes successfully, so SST deploy never runs when Gitleaks/Trivy or tests fail.

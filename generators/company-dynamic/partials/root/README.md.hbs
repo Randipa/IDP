@@ -33,43 +33,77 @@ npm run dev
 
 ## CI/CD
 
-**CI** (`.github/workflows/ci.yml`) runs quality + security on every push — no secrets required.
+**CI** (`.github/workflows/ci.yml`) — quality + security (Gitleaks + Trivy) on every push. No secrets required.
 
-**Deploy** (`.github/workflows/deploy.yml`) deploys to AWS with SST:
+**Deploy** (`.github/workflows/deploy.yml`) — runs **only after CI passes**:
 
-| Trigger | SST stage |
-|---------|-----------|
-| Push to `develop` | `dev` |
-| Push to `main` | `staging` |
-| Manual workflow dispatch | `production` |
+```text
+Push → CI (lint, test, security scan) → pass? → Deploy to AWS
+                                      → fail?  → no deploy
+```
 
-Before deploy works, add this repo secret in GitHub → **Settings** → **Secrets and variables** → **Actions**:
+| After CI success on | GitHub environment | SST stage |
+|---------------------|-------------------|-----------|
+| `develop` (default branch) | `dev` | `dev` |
+| `main` (create when ready for staging) | `staging` | `staging` |
+| Manual dispatch → production | `production` | `production` |
 
-| Secret | Value |
-|--------|-------|
-| `AWS_ROLE_ARN` | IAM role from `platform-infra` deploy (e.g. `company-idp-github-deploy-staging`) |
+Manual deploy (dev/staging/production) is also available from **Actions → Deploy → Run workflow** when needed.
 
-Deploy the platform roles once:
+### Branch strategy
+
+New repositories are created on **`develop`** (not `main`). Push to `develop` → CI → dev deploy.
+
+When ready for staging:
+
+```sh
+git checkout develop
+git checkout -b main
+git push -u origin main
+```
+
+Optionally set `main` as the default branch in GitHub repo settings for staging-focused workflows.
+
+### One-time AWS + GitHub setup
+
+1. Deploy IAM roles (once per org):
 
 ```sh
 cd platform-infra
 npm install
-cp .env.example .env   # set GITHUB_ORG=Randipa
+cp .env.example .env   # GITHUB_ORG=Randipa
 export $(grep -v '^#' .env | xargs)
 npm run deploy:platform
 ```
 
-Optional SonarQube pipeline: copy `.github/workflows/ci-extended.yml.example` → `ci-extended.yml` and add `SONAR_TOKEN` + `SONAR_HOST_URL` secrets.
+2. In the GitHub repo → **Settings** → **Environments**, create `dev`, `staging`, `production`.
 
-Reusable workflows are loaded from `{{idpRepo}}` at ref `{{idpRef}}`.
+3. Add secret `AWS_ROLE_ARN` in each environment:
 
-## Dependency updates (Dependabot)
+| Environment | Role (from platform-infra output) |
+|-------------|-----------------------------------|
+| `dev` | `company-idp-github-deploy-dev` ARN |
+| `staging` | `company-idp-github-deploy-staging` ARN |
+| `production` | `company-idp-github-deploy-production` ARN |
 
-This repo includes `.github/dependabot.yml` for weekly npm and GitHub Actions update PRs.
+Reusable workflows: `{{idpRepo}}` @ `{{idpRef}}`.
 
-Enable security alerts in GitHub → **Settings** → **Code security** → turn on **Dependabot alerts** and **Dependabot security updates**.
+## Dependabot (production only)
 
-## Deployment
+**Dev/staging repos do not include active Dependabot** — auto dependency PRs can break CI/deploy.
+
+When ready for production maintenance:
+
+```sh
+cp .github/dependabot.production.yml.example .github/dependabot.yml
+git add .github/dependabot.yml
+git commit -m "chore: enable production dependency updates"
+git push
+```
+
+Optional: enable **Dependabot alerts** in GitHub → Settings → Code security (alerts only, no auto PRs).
+
+## Local SST deploy
 
 ```sh
 npm run deploy:dev
