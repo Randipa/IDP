@@ -37,6 +37,7 @@ jobs:
       stage: dev
       aws-region: {{awsRegion}}
       git-ref: {{gha 'github.event.workflow_run.head_sha'}}
+    secrets: inherit
 
   deploy-staging:
     name: Deploy staging
@@ -46,6 +47,7 @@ jobs:
       stage: staging
       aws-region: {{awsRegion}}
       git-ref: {{gha 'github.event.workflow_run.head_sha'}}
+    secrets: inherit
 
   deploy-production:
     name: Deploy production
@@ -55,6 +57,7 @@ jobs:
       stage: production
       aws-region: {{awsRegion}}
       git-ref: {{gha 'github.sha'}}
+    secrets: inherit
 
   deploy-manual-dev:
     name: Deploy dev (manual)
@@ -64,6 +67,7 @@ jobs:
       stage: dev
       aws-region: {{awsRegion}}
       git-ref: {{gha 'github.sha'}}
+    secrets: inherit
 
   deploy-manual-staging:
     name: Deploy staging (manual)
@@ -73,3 +77,4 @@ jobs:
       stage: staging
       aws-region: {{awsRegion}}
       git-ref: {{gha 'github.sha'}}
+    secrets: inherit

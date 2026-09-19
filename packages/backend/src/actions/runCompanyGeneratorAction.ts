@@ -124,28 +124,6 @@ export function createRunCompanyGeneratorAction() {
       }
 
       ctx.logger.info('Company generator completed successfully');
-
-      const lockFilePath = path.join(ctx.workspacePath, 'package-lock.json');
-      if (!fs.existsSync(lockFilePath)) {
-        try {
-          ctx.logger.info('Generating package-lock.json for CI');
-          execFileSync(
-            'npm',
-            ['install', '--package-lock-only', '--ignore-scripts', '--no-audit'],
-            {
-              cwd: ctx.workspacePath,
-              stdio: 'pipe',
-              timeout: 120_000,
-            },
-          );
-        } catch (error) {
-          ctx.logger.warn(
-            `Could not generate package-lock.json: ${
-              error instanceof Error ? error.message : 'unknown error'
-            }`,
-          );
-        }
-      }
     },
   });
 }
