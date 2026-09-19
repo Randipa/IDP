@@ -87,6 +87,26 @@ export function createRunCompanyGeneratorAction() {
         );
       }
 
+      try {
+        delete require.cache[require.resolve(plopfilePath)];
+      } catch {
+        // Plopfile not cached yet — first load in this process.
+      }
+
+      const requiredPartials = [
+        'partials/ci/dependabot.production.yml.example',
+        'partials/ci/deploy.yml.hbs',
+        'partials/ci/ci.yml.hbs',
+      ];
+      for (const partial of requiredPartials) {
+        const partialPath = path.join(generatorRoot, partial);
+        if (!fs.existsSync(partialPath)) {
+          throw new Error(
+            `Plop generator partial missing: ${partialPath}. Restart Backstage after updating generators/.`,
+          );
+        }
+      }
+
       ctx.logger.info(
         `Running company generator for ${ctx.input.name} in ${ctx.workspacePath}`,
       );
