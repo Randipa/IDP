@@ -28,13 +28,14 @@ on:
         default: ''
     secrets:
       AWS_ROLE_ARN:
-        description: IAM role ARN configured for GitHub OIDC
-        required: true
+        description: Optional IAM role override; defaults to the environment secret for the stage
+        required: false
 
 jobs:
   deploy:
     name: Deploy (${{ inputs.stage }})
     runs-on: ubuntu-latest
+    environment: ${{ inputs.stage }}
     permissions:
       id-token: write
       contents: read

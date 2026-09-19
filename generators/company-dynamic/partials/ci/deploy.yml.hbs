@@ -32,59 +32,44 @@ jobs:
   deploy-dev:
     name: Deploy dev
     if: {{gha "github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'develop'"}}
-    environment: dev
     uses: {{idpRepo}}/.github/workflows/reusable-deploy-sst.yml@{{idpRef}}
     with:
       stage: dev
       aws-region: {{awsRegion}}
       git-ref: {{gha 'github.event.workflow_run.head_sha'}}
-    secrets:
-      AWS_ROLE_ARN: {{gha 'secrets.AWS_ROLE_ARN'}}
 
   deploy-staging:
     name: Deploy staging
     if: {{gha "github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'"}}
-    environment: staging
     uses: {{idpRepo}}/.github/workflows/reusable-deploy-sst.yml@{{idpRef}}
     with:
       stage: staging
       aws-region: {{awsRegion}}
       git-ref: {{gha 'github.event.workflow_run.head_sha'}}
-    secrets:
-      AWS_ROLE_ARN: {{gha 'secrets.AWS_ROLE_ARN'}}
 
   deploy-production:
     name: Deploy production
     if: {{gha "github.event_name == 'workflow_dispatch' && github.event.inputs.stage == 'production'"}}
-    environment: production
     uses: {{idpRepo}}/.github/workflows/reusable-deploy-sst.yml@{{idpRef}}
     with:
       stage: production
       aws-region: {{awsRegion}}
       git-ref: {{gha 'github.sha'}}
-    secrets:
-      AWS_ROLE_ARN: {{gha 'secrets.AWS_ROLE_ARN'}}
 
   deploy-manual-dev:
     name: Deploy dev (manual)
     if: {{gha "github.event_name == 'workflow_dispatch' && github.event.inputs.stage == 'dev'"}}
-    environment: dev
     uses: {{idpRepo}}/.github/workflows/reusable-deploy-sst.yml@{{idpRef}}
     with:
       stage: dev
       aws-region: {{awsRegion}}
       git-ref: {{gha 'github.sha'}}
-    secrets:
-      AWS_ROLE_ARN: {{gha 'secrets.AWS_ROLE_ARN'}}
 
   deploy-manual-staging:
     name: Deploy staging (manual)
     if: {{gha "github.event_name == 'workflow_dispatch' && github.event.inputs.stage == 'staging'"}}
-    environment: staging
     uses: {{idpRepo}}/.github/workflows/reusable-deploy-sst.yml@{{idpRef}}
     with:
       stage: staging
       aws-region: {{awsRegion}}
       git-ref: {{gha 'github.sha'}}
-    secrets:
-      AWS_ROLE_ARN: {{gha 'secrets.AWS_ROLE_ARN'}}
