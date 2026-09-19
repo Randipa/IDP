@@ -40,6 +40,7 @@ export default $config({
       environment: {
         NODE_ENV: $app.stage,
         PORT: '3000',
+        APP_NAME: '${{ values.name }}',
       },
       scaling: {
         min: $app.stage === 'production' ? 2 : 1,
@@ -50,7 +51,7 @@ export default $config({
     new sst.aws.Nextjs('Client', {
       path: 'packages/client',
       environment: {
-        NEXT_PUBLIC_API_URL: api.url,
+        NEXT_PUBLIC_API_URL: $interpolate`${api.url}/api`,
         APP_NAME: '${{ values.name }}',
         APP_STAGE: $app.stage,
       },
@@ -64,8 +65,13 @@ export default $config({
       },
       environment: {
         VITE_APP_NAME: '${{ values.name }}',
-        VITE_API_URL: api.url,
+        VITE_API_URL: $interpolate`${api.url}/api`,
       },
     });
+
+    return {
+      api: api.url,
+      health: $interpolate`${api.url}/api/health`,
+    };
   },
 });

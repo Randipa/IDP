@@ -7,6 +7,17 @@ const port = process.env.PORT ?? 3000;
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (_req, res) => {
+  res.json({
+    status: 'ok',
+    service: process.env.APP_NAME ?? 'api',
+    endpoints: {
+      api: '/api',
+      health: '/api/health',
+    },
+  });
+});
+
 app.get('/api', (_req, res) => {
   res.json({
     message: 'Express API is running',
